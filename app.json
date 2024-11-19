@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "national_dme_survey",
+    "name": "DME survey",
     "slug": "national_dme_survey",
     "version": "1.0.0",
     "scheme": "your-app-scheme",
@@ -33,7 +33,8 @@
       }
     },
     "plugins": [
-      "expo-router"
+      "expo-router",
+      "expo-font"
     ]
   }
 }
