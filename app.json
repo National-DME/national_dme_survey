@@ -3,6 +3,7 @@
     "name": "national_dme_survey",
     "slug": "national_dme_survey",
     "version": "1.0.0",
+    "scheme": "your-app-scheme",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -23,12 +24,16 @@
       "package": "com.tomcottis21.national_dme_survey"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/favicon.png",
+      "bundler": "metro"
     },
     "extra": {
       "eas": {
         "projectId": "505915c2-16a7-495d-a3ac-bc64be315e91"
       }
-    }
+    },
+    "plugins": [
+      "expo-router"
+    ]
   }
 }
