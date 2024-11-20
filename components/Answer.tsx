@@ -2,7 +2,8 @@ import { View, Text } from 'react-native';
 import React from 'react';
 import useGlobalStyles from '../styles/globalStyles';
 import { QuestionInterface } from './Question';
-import Rating from './answers/Rating';
+import RatingAnswer from './answers/RatingAnswer';
+import TextAnswer from './answers/TextAnswer';
 
 /**
  * @type references the question interface type property; must be the same as this type because based on the type defined in the question component, answer must render a certain answer type
@@ -25,10 +26,10 @@ export default function Answer(props: AnswerProps) {
                 <Text style={globalStyles.question}>Radio list</Text>
             )}
             {props.type === 'rating' && (
-                <Rating />
+                <RatingAnswer />
             )}
             {props.type === 'text' && (
-                <Text style={globalStyles.question}>Text</Text>
+                <TextAnswer />
             )}
 		</View>
 	);

@@ -1,12 +1,12 @@
 import { View, Text } from 'react-native';
 import React from 'react';
-import { AirbnbRating, Rating as Rate } from 'react-native-ratings';
+import { Rating } from 'react-native-ratings';
 import { theme } from '../../styles/theme';
 
-export default function Rating() {
+export default function RatingAnswer() {
 	return (
         <>
-            <Rate
+            <Rating
                 type='heart'
                 showRating
                 ratingBackgroundColor={theme.text}

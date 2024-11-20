@@ -59,6 +59,21 @@ const useGlobalStyles = () => {
 		buttonLabel: {
 			fontFamily: 'Nunito',
 		},
+		/* -- INPUTS -- */
+		textInput: {
+			backgroundColor: theme.background,
+			margin: 10,
+			padding: 5,
+			borderWidth: 1,
+			borderRadius: 5,
+			borderColor: theme.border,
+			fontFamily: 'Nunito',
+			fontSize: 20,
+			color: theme.text
+		},
+		textInputFocused: {
+			borderColor: theme.accent.gradient1
+		},
 		/* -- SPECIAL -- */
 		line: {
 			borderWidth: 2,
