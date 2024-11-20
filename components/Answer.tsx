@@ -4,8 +4,8 @@ import useGlobalStyles from '../styles/globalStyles';
 import { QuestionInterface } from './Question';
 import RatingAnswer from './answers/RatingAnswer';
 import TextAnswer from './answers/TextAnswer';
-import RadiolistAnswer from './answers/RadiolistAnswer';
-import CheckListAnswer from './answers/ChecklistAnswer';
+import CheckListAnswer from './answers/CheckListAnswer';
+import RadioListAnswer from './answers/RadioListAnswer';
 
 /**
  * @type references the question interface type property; must be the same as this type because based on the type defined in the question component, answer must render a certain answer type
@@ -48,7 +48,7 @@ export default function Answer(props: AnswerProps) {
                 <CheckListAnswer answers={props.answers && props.answers}/>
             )}
             {props.type === 'radio list' && (
-                <RadiolistAnswer />
+                <RadioListAnswer />
             )}
             {props.type === 'rating' && (
                 <RatingAnswer />
