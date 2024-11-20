@@ -43,6 +43,12 @@ const useGlobalStyles = () => {
             padding: 10,
             color: theme.text
         },
+		answer: {
+			fontFamily: 'Nunito',
+			fontSize: 17,
+			padding: 5,
+			color: theme.text
+		},
 		/* -- BUTTONS -- */
 		buttonPrimary: {
 			color: theme.text,
@@ -72,7 +78,14 @@ const useGlobalStyles = () => {
 			color: theme.text
 		},
 		textInputFocused: {
-			borderColor: theme.accent.gradient1
+			borderColor: theme.secondary
+		},
+		checklistContainer: {
+			justifyContent: 'flex-start'
+		},
+		checklist: {
+			flexDirection: 'row',
+			justifyContent: 'flex-start',
 		},
 		/* -- SPECIAL -- */
 		line: {

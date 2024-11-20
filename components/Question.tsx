@@ -8,33 +8,59 @@ import Answer from './Answer';
  * @type is the type of question
  * @answers optional; are the associated answers; only used with radio and check lists
  */
-export interface QuestionInterface {
+export interface BaseQuestion {
 	text: string;
-	type: 'radio list' | 'text' | 'rating' | 'check list';
-    answers?: string[];
+}
+
+export interface RadioListQuestion extends BaseQuestion {
+	type: 'radio list';
+	answers: string[]; // Required for 'radio list'
+}
+
+export interface CheckListQuestion extends BaseQuestion {
+	type: 'check list';
+	answers: string[]; // Required for 'check list'
+}
+
+export interface RatingQuestion extends BaseQuestion {
+	type: 'rating'; // No `answers`
+}
+
+export interface TextQuestion extends BaseQuestion {
+	type: 'text'; // No `answers`
 }
 
 // Includes question interface with an index property
-interface QuestionProps extends QuestionInterface {
+export type QuestionInterface = 
+    | RadioListQuestion
+    | CheckListQuestion
+    | RatingQuestion
+    | TextQuestion
+
+interface QuestionProps {
+    question: QuestionInterface;
     index: number;
 }
-
 /**
  *
  * @returns The question component; used to render a question
  */
-export default function Question(props: QuestionProps) {
+export default function Question({ question, index }: QuestionProps) {
     const globalStyles = useGlobalStyles();
 	return (
         <View style={globalStyles.questionContainer}>
             <View style={globalStyles.questionBanner}>
                 <Text style={globalStyles.banner}>
-                    Question: {props.index + 1}
+                    Question: {index + 1}
                 </Text>
             </View>
             <View style={globalStyles.questionTextContainer}>
-                <Text style={globalStyles.question}>{props.text}</Text>
-                <Answer type={props.type} answers={props.answers} />
+                <Text style={globalStyles.question}>{question.text}</Text>
+                {question.type === 'radio list' || question.type === 'check list' ? (
+                    <Answer type={question.type} answers={question.answers} />
+                ) : (
+                    <Answer type={question.type} />
+                )}
             </View>
         </View>
 	);
