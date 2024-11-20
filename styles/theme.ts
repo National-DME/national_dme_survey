@@ -5,6 +5,7 @@ export type ThemeColors = {
     background: string;
     text: string;
     border: string;
+    card: string;
     constant: ConstantColors
 }
 
@@ -39,5 +40,6 @@ export const theme: ThemeColors = {
     background: '#21282E',
     text: '#FDFFFC',
     border: '#495E71',
+    card: '#1A4469',
     constant
 }

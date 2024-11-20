@@ -10,10 +10,11 @@ const useGlobalStyles = () => {
 		/* -- CONTAINERS -- */
 		container: {
 			flex: 1,
-			justifyContent: 'center',
+			justifyContent: 'flex-start',
 			alignItems: 'center',
 			backgroundColor: theme.background,
 			padding: 10,
+            marginVertical: 10
 		},
 		/* -- CONTENT -- */
 		title: {
@@ -28,15 +29,29 @@ const useGlobalStyles = () => {
 			textAlign: 'center',
 			marginVertical: 10,
 		},
+		banner: {
+			fontFamily: 'Nunito',
+			fontSize: 22,
+			color: theme.text,
+			textAlign: 'left',
+			padding: 5,
+		},
+        question: {
+            fontFamily: 'Nunito',
+            fontSize: 19,
+            textAlign: 'left',
+            padding: 10,
+            color: theme.text
+        },
 		/* -- BUTTONS -- */
 		buttonPrimary: {
 			color: theme.text,
 			backgroundColor: theme.primary,
 		},
-        buttonSecondary: {
-            color: theme.text,
-            backgroundColor: theme.secondary
-        },
+		buttonSecondary: {
+			color: theme.text,
+			backgroundColor: theme.secondary,
+		},
 		buttonAccent: {
 			color: theme.text,
 			backgroundColor: theme.accent.primary,
@@ -50,7 +65,26 @@ const useGlobalStyles = () => {
 			borderColor: theme.border,
 			width: '100%',
 			marginVertical: 5,
-            borderRadius: 5,
+			borderRadius: 5,
+		},
+		/* -- QUESTION COMPONENT -- */
+		questionContainer: {
+			width: '100%',
+			flexDirection: 'column',
+            marginVertical: 10
+		},
+		questionBanner: {
+			backgroundColor: theme.border,
+			borderTopLeftRadius: 10,
+			borderTopRightRadius: 10,
+		},
+		questionTextContainer: {
+			borderBottomWidth: 1,
+			borderRightWidth: 1,
+			borderLeftWidth: 1,
+			borderColor: theme.border,
+			borderBottomLeftRadius: 10,
+            borderBottomRightRadius: 10
 		},
 	});
 };

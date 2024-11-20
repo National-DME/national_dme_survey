@@ -5,6 +5,7 @@ import useGlobalStyles from '../styles/globalStyles';
 import { StatusBar } from 'expo-status-bar';
 import { theme } from '../styles/theme';
 import { useRouter } from 'expo-router';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 /**
  * 
@@ -18,8 +19,8 @@ export default function RepresentativeScreen() {
 
 	return (
         <>
-            <StatusBar style='dark' backgroundColor={theme.primary} />
-            <View style={globalStyles.container}>
+            <StatusBar style='light' backgroundColor={theme.primary} />
+            <SafeAreaView style={globalStyles.container}>
                 <Text style={globalStyles.title}>Representative screen</Text>
                 <View style={globalStyles.line} />
                 <Text style={globalStyles.subtitle}>
@@ -33,7 +34,7 @@ export default function RepresentativeScreen() {
                 >
                     Start Survey
                 </Button>
-            </View>
+            </SafeAreaView>
         </>
 	);
 }
