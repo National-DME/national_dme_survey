@@ -86,6 +86,11 @@ const useGlobalStyles = () => {
 			borderBottomLeftRadius: 10,
             borderBottomRightRadius: 10
 		},
+		/* -- ANSWER COMPONENT -- */
+		answerContianer: {
+			flexDirection: 'column',
+			marginVertical: 10,
+		},
 	});
 };
 
