@@ -16,10 +16,24 @@ const useGlobalStyles = () => {
 			padding: 10,
             marginVertical: 10
 		},
+		loginContainer: {
+			flex: 1,
+			flexDirection: 'column',
+			justifyContent: 'center',
+			alignItems: 'center',
+			backgroundColor: theme.background,
+		},
 		/* -- CONTENT -- */
+		image: {
+			width: 130,
+			height: 130,
+			resizeMode: 'contain'
+		},
 		title: {
 			fontFamily: 'Nunito',
-			fontSize: 28,
+			fontSize: 40,
+			textAlign: 'center',
+			marginBottom: 15,
 			color: theme.text,
 		},
 		subtitle: {
@@ -50,24 +64,31 @@ const useGlobalStyles = () => {
 			color: theme.text
 		},
 		/* -- BUTTONS -- */
-		buttonPrimary: {
-			color: theme.text,
+		button: {
 			backgroundColor: theme.primary,
-		},
-		buttonSecondary: {
-			color: theme.text,
-			backgroundColor: theme.secondary,
-		},
-		buttonAccent: {
-			color: theme.text,
-			backgroundColor: theme.accent.primary,
+			borderRadius: 10,
+			margin: 10,
+			paddingHorizontal: 15,
+			paddingVertical: 10
 		},
 		buttonLabel: {
 			fontFamily: 'Nunito',
+			fontSize: 20,
+			color: theme.text,
+		},
+		buttonPrimary: {
+			backgroundColor: theme.primary,
+		},
+		buttonSecondary: {
+			backgroundColor: theme.secondary,
+		},
+		buttonAccent: {
+			backgroundColor: theme.accent.primary,
 		},
 		/* -- INPUTS -- */
 		textInput: {
 			backgroundColor: theme.background,
+			width: '85%',
 			margin: 10,
 			padding: 5,
 			borderWidth: 1,

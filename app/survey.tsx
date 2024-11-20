@@ -103,7 +103,7 @@ export default function SurveyScreen() {
             {/* 
                 Updating status bar color to convey to user that survey has started and to provide contrast
             */}
-            <StatusBar style='dark' backgroundColor={theme.secondary} />
+            <StatusBar style='light' backgroundColor={theme.accent.gradient1} />
             <View style={globalStyles.container}>
                 <ScrollView contentContainerStyle={globalStyles.questionContainer}>
                     {mockSurvey.map((question: QuestionInterface, index) => (
