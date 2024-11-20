@@ -48,7 +48,7 @@ export default function Answer(props: AnswerProps) {
                 <CheckListAnswer answers={props.answers && props.answers}/>
             )}
             {props.type === 'radio list' && (
-                <RadioListAnswer />
+                <RadioListAnswer answers={props.answers && props.answers} />
             )}
             {props.type === 'rating' && (
                 <RatingAnswer />

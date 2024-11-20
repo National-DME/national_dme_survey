@@ -21,9 +21,9 @@ export default function CheckListAnswer(props: CheckListInterface) {
 	}
 
 	return (
-		<View style={globalStyles.checklistContainer}>
+		<View style={globalStyles.answerListContainer}>
 			{props.answers.map((answer, index) => (
-				<View key={index} style={globalStyles.checklist}>
+				<View key={index} style={globalStyles.listItem}>
 					<Checkbox
 						status={checkedState[index] ? 'checked' : 'unchecked'}
 						onPress={() => handleCheckboxChanged(index)}

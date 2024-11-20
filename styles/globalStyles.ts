@@ -80,10 +80,10 @@ const useGlobalStyles = () => {
 		textInputFocused: {
 			borderColor: theme.secondary
 		},
-		checklistContainer: {
+		answerListContainer: {
 			justifyContent: 'flex-start'
 		},
-		checklist: {
+		listItem: {
 			flexDirection: 'row',
 			justifyContent: 'flex-start',
 		},
