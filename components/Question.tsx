@@ -5,6 +5,9 @@ import useGlobalStyles from '../styles/globalStyles';
 export interface QuestionInterface {
 	text: string;
 	type: 'multiple choice' | 'text' | 'rating';
+}
+
+interface QuestionProps extends QuestionInterface {
     index: number;
 }
 
@@ -12,7 +15,7 @@ export interface QuestionInterface {
  *
  * @returns The question component; used to render a question
  */
-export default function Question(props: QuestionInterface) {
+export default function Question(props: QuestionProps) {
     const globalStyles = useGlobalStyles();
 	return (
         <View style={globalStyles.questionContainer}>
