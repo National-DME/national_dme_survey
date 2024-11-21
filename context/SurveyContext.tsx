@@ -3,7 +3,7 @@ import { endpoints } from '../utils/network/endpoints';
 
 export interface SurveyContextInterface {
     warehouseList: Record<string, Warehouse[]>;
-    branches: { label: string, value: string }[];
+    branches: string[];
     selectedWarehouses: string[];
     setSelectedWarehouses: (warehouses: string[]) => void;
 }
@@ -31,10 +31,10 @@ export const SurveyContextProvider: React.FC<{ children: ReactNode }> = ({ child
 	>({});
 
 	/**
-	 * Branch state variable that holds possible branches to select warehouses from; Must be array of { label: branch, value: branch } objects in order to feed to dropdowns
+	 * Branch state variable that holds possible branches to select warehouses from; Must be array of strings
 	 */
 	// TODO maybe better to be simple string array, then format data object for dropdowns in dropdown tsx
-	const [branches, setBranches] = useState<{ label: string, value: string }[]>(
+	const [branches, setBranches] = useState<string[]>(
 		[]
 	);
 
@@ -104,18 +104,13 @@ export const SurveyContextProvider: React.FC<{ children: ReactNode }> = ({ child
 	const separateBranchesAndGroup = (
 		warehouses: Warehouse[]
 	): {
-		branches: { label: string; value: string }[];
+		branches: string[];
 		groupedWarehouses: Record<string, Warehouse[]>;
 	} => {
 		// Separate branch id of each warehouse pulled
-		const branchArray = [
+		const branches = [
 			...new Set(warehouses.map((warehouse) => warehouse.BranchWhseID)),
 		];
-
-		const branches = branchArray.map((branch) => ({
-			label: branch,
-			value: branch,
-		}));
 
 		// Reduce the warehouse list to arrays separated by branch
 		const groupedWarehouses = warehouses.reduce((accumulator, warehouse) => {

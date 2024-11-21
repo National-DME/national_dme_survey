@@ -46,7 +46,10 @@ export default function RepresentativeScreen() {
                     inputSearchStyle={globalStyles.inputSearchStyle}
                     itemTextStyle={globalStyles.itemTextStyle}
                     activeColor={theme.secondary}
-                    data={branches}
+                    data={branches.map((branch) => ({
+                        label: branch,
+                        value: branch
+                    }))}
                     placeholder='Select branch'
                     searchPlaceholder='Search branches...'
                     maxHeight={300}
@@ -73,7 +76,10 @@ export default function RepresentativeScreen() {
                     itemTextStyle={globalStyles.itemTextStyle}
                     selectedStyle={globalStyles.selectedStyle}
                     activeColor={theme.secondary}
-                    data={branches}
+                    data={branches.map((branch) => ({
+                        label: branch,
+                        value: branch
+                    }))}
                     value={selectedWarehouses}
                     placeholder='Select warehouse(s)'
                     searchPlaceholder='Search warehouses'
