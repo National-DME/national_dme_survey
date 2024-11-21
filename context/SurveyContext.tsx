@@ -6,6 +6,8 @@ export interface SurveyContextInterface {
     branches: string[];
     selectedWarehouses: string[];
     setSelectedWarehouses: (warehouses: string[]) => void;
+	selectedBranch: string;
+	setSelectedBranch: (branch: string) => void;
 }
 
 /**
@@ -37,6 +39,13 @@ export const SurveyContextProvider: React.FC<{ children: ReactNode }> = ({ child
 	const [branches, setBranches] = useState<string[]>(
 		[]
 	);
+
+	/**
+	 * Selected branch state variable that holds the branch name that the representative selected
+	 * 
+	 * @where Set in the first dropdown of the representative screen
+	 */
+	const [selectedBranch, setSelectedBranch] = useState<string>('');
 
 	/**
 	 * Represents the warehouse(s) that were selected by the account representative
@@ -109,16 +118,17 @@ export const SurveyContextProvider: React.FC<{ children: ReactNode }> = ({ child
 	} => {
 		// Separate branch id of each warehouse pulled
 		const branches = [
-			...new Set(warehouses.map((warehouse) => warehouse.BranchWhseID)),
+			...new Set(warehouses.map((warehouse) => warehouse.BranchWhseID.trim())),
 		];
 
 		// Reduce the warehouse list to arrays separated by branch
 		const groupedWarehouses = warehouses.reduce((accumulator, warehouse) => {
-			const { BranchWhseID } = warehouse;
-			if (!accumulator[BranchWhseID]) {
-				accumulator[BranchWhseID] = [];
+			const branchId = warehouse.BranchWhseID.trim();
+			
+			if (!accumulator[branchId]) {
+				accumulator[branchId] = [];
 			}
-			accumulator[BranchWhseID].push(warehouse);
+			accumulator[branchId].push(warehouse);
 			return accumulator;
 		}, {} as Record<string, Warehouse[]>);
 
@@ -151,7 +161,9 @@ export const SurveyContextProvider: React.FC<{ children: ReactNode }> = ({ child
 	};
 
 	return (
-		<SurveyContext.Provider value={{ warehouseList, branches, selectedWarehouses, setSelectedWarehouses }}>{children}</SurveyContext.Provider>
+		<SurveyContext.Provider value={{ warehouseList, branches, selectedWarehouses, setSelectedWarehouses, selectedBranch, setSelectedBranch }}>
+			{children}
+		</SurveyContext.Provider>
 	);
 }
 

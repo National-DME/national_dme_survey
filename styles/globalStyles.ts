@@ -13,8 +13,8 @@ const useGlobalStyles = () => {
 			justifyContent: 'flex-start',
 			//alignItems: 'center',
 			backgroundColor: theme.background,
-			padding: 10,
-            marginVertical: 10
+			padding: 8,
+			marginVertical: 10,
 		},
 		loginContainer: {
 			flex: 1,
@@ -23,11 +23,14 @@ const useGlobalStyles = () => {
 			alignItems: 'center',
 			backgroundColor: theme.background,
 		},
+		iconContainer: {
+			paddingHorizontal: 5
+		},
 		/* -- CONTENT -- */
 		image: {
 			width: 130,
 			height: 130,
-			resizeMode: 'contain'
+			resizeMode: 'contain',
 		},
 		title: {
 			fontFamily: 'Nunito',
@@ -48,34 +51,37 @@ const useGlobalStyles = () => {
 			fontSize: 22,
 			color: theme.text,
 			textAlign: 'left',
-			padding: 5,
+			padding: 8,
 		},
-        question: {
-            fontFamily: 'Nunito',
-            fontSize: 19,
-            textAlign: 'left',
-            padding: 10,
-            color: theme.text
-        },
+		question: {
+			fontFamily: 'Nunito',
+			fontSize: 19,
+			textAlign: 'left',
+			padding: 8,
+			color: theme.text,
+		},
 		answer: {
 			fontFamily: 'Nunito',
 			fontSize: 17,
-			padding: 5,
-			color: theme.text
+			padding: 8,
+			color: theme.text,
 		},
 		/* -- BUTTONS -- */
 		button: {
+			flexDirection: 'row',
+			justifyContent: 'center',
+			alignItems: 'center',
 			backgroundColor: theme.primary,
-			borderRadius: 10,
+			borderRadius: 8,
 			marginVertical: 10,
 			paddingHorizontal: 15,
-			paddingVertical: 10,
+			paddingVertical: 8,
 		},
 		buttonLabel: {
 			fontFamily: 'Nunito',
 			fontSize: 20,
 			color: theme.text,
-			textAlign: 'center'
+			textAlign: 'center',
 		},
 		buttonPrimary: {
 			backgroundColor: theme.primary,
@@ -91,19 +97,19 @@ const useGlobalStyles = () => {
 			backgroundColor: theme.background,
 			width: '85%',
 			margin: 10,
-			padding: 5,
-			borderWidth: 1,
-			borderRadius: 5,
+			padding: 8,
+			borderWidth: 0.5,
+			borderRadius: 8,
 			borderColor: theme.border,
 			fontFamily: 'Nunito',
 			fontSize: 20,
-			color: theme.text
+			color: theme.text,
 		},
 		textInputFocused: {
-			borderColor: theme.secondary
+			borderColor: theme.secondary,
 		},
 		answerListContainer: {
-			justifyContent: 'flex-start'
+			justifyContent: 'flex-start',
 		},
 		listItem: {
 			flexDirection: 'row',
@@ -116,15 +122,16 @@ const useGlobalStyles = () => {
 			borderWidth: 0.5,
 			borderRadius: 8,
 			paddingHorizontal: 8,
-			marginVertical: 10
+			marginVertical: 10,
 		},
 		placeholder: {
 			color: theme.border,
-			fontFamily: 'Nunito'
+			fontFamily: 'Nunito',
 		},
 		selectedText: {
 			color: theme.text,
 			fontFamily: 'Nunito',
+			fontSize: 20,
 		},
 		selectedStyle: {
 			borderColor: theme.border,
@@ -133,28 +140,42 @@ const useGlobalStyles = () => {
 		inputSearchStyle: {
 			fontFamily: 'Nunito',
 			borderRadius: 8,
-			color: theme.border
+			color: theme.border,
 		},
 		itemTextStyle: {
 			fontFamily: 'Nunito',
-			color: theme.border
+			color: theme.border,
 		},
 		containerStyle: {
-			backgroundColor: theme.border
+			backgroundColor: theme.border,
+		},
+		selectedButton: {
+			flexDirection: 'row',
+			justifyContent: 'center',
+			alignItems: 'center',
+			backgroundColor: theme.background,
+			color: theme.text,
+			marginVertical: 10,
+			marginRight: 10,
+			padding: 8,
+			paddingRight: 0,
+			borderWidth: 0.5,
+			borderRadius: 8,
+			borderColor: theme.secondary,
 		},
 		/* -- SPECIAL -- */
 		line: {
-			borderWidth: 1,
+			borderWidth: 0.5,
 			borderColor: theme.border,
 			width: '100%',
 			marginVertical: 5,
-			borderRadius: 5,
+			borderRadius: 8,
 		},
 		/* -- QUESTION COMPONENT -- */
 		questionContainer: {
 			width: '100%',
 			flexDirection: 'column',
-            marginVertical: 10
+			marginVertical: 10,
 		},
 		questionBanner: {
 			backgroundColor: theme.border,
@@ -167,7 +188,7 @@ const useGlobalStyles = () => {
 			borderLeftWidth: 1,
 			borderColor: theme.border,
 			borderBottomLeftRadius: 10,
-            borderBottomRightRadius: 10
+			borderBottomRightRadius: 10,
 		},
 		/* -- ANSWER COMPONENT -- */
 		answerContianer: {

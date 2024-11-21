@@ -7,8 +7,9 @@ import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Button from '../components/generic/Button';
 import { Dropdown, MultiSelect } from 'react-native-element-dropdown';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useSurvey } from '../context/SurveyContext';
+import { ScrollView } from 'react-native-gesture-handler';
 
 /**
  * This is the screen used by the representative to input their data first and to initialize the survey
@@ -18,7 +19,7 @@ import { useSurvey } from '../context/SurveyContext';
 export default function RepresentativeScreen() {
 	const globalStyles = useGlobalStyles();
 	const router = useRouter();
-    const { branches, selectedWarehouses, setSelectedWarehouses } = useSurvey();
+    const { warehouseList, branches, selectedWarehouses, setSelectedWarehouses, selectedBranch, setSelectedBranch } = useSurvey();
 
 	/**
 	 * Starts the survey by pushing the user to the survey screen
@@ -28,14 +29,14 @@ export default function RepresentativeScreen() {
 	};
 
 	return (
-		<>
+		<ScrollView>
 			<StatusBar style='light' backgroundColor={theme.secondary} />
 			<SafeAreaView style={globalStyles.container}>
 				<Text style={globalStyles.title}>Where are you?</Text>
 				<View style={globalStyles.line} />
 				<Text style={globalStyles.subtitle}>
 					Before starting the survey, select the branch and warehouse(s)
-					you’re at. This ensures the responses are linked to the right
+					you’re at. This ensures the client ratings are linked to the right
 					location.
 				</Text>
 				<Dropdown 
@@ -55,8 +56,9 @@ export default function RepresentativeScreen() {
                     maxHeight={300}
                     labelField='label'
                     valueField='value'
+                    value={selectedBranch}
                     onChange={item => {
-                        console.log(item);
+                        setSelectedBranch(item.value)
                     }}
                     renderLeftIcon={() => (
                         <MaterialCommunityIcons 
@@ -67,44 +69,63 @@ export default function RepresentativeScreen() {
                         />
                     )}
                 />
-				<MultiSelect 
-                    mode='default'
-                    style={globalStyles.dropdown}
-                    placeholderStyle={globalStyles.placeholder}
-                    selectedTextStyle={globalStyles.selectedText}
-                    inputSearchStyle={globalStyles.inputSearchStyle}
-                    itemTextStyle={globalStyles.itemTextStyle}
-                    selectedStyle={globalStyles.selectedStyle}
-                    activeColor={theme.secondary}
-                    data={branches.map((branch) => ({
-                        label: branch,
-                        value: branch
-                    }))}
-                    value={selectedWarehouses}
-                    placeholder='Select warehouse(s)'
-                    searchPlaceholder='Search warehouses'
-                    search
-                    maxHeight={300}
-                    labelField='label'
-                    valueField='value'
-                    onChange={item => {
-                        setSelectedWarehouses(item);
-                    }}
-                    renderLeftIcon={() => (
-                        <MaterialCommunityIcons 
-                            color={theme.secondary}
-                            size={20}
-                            name='warehouse'
-                            style={{padding: 5}}
-                        />
-                    )}
-                />
-				<Button
-					title='Start Survey'
-					onPress={handleStartSurvey}
-					buttonStyle={[globalStyles.button, globalStyles.buttonSecondary]}
-				/>
+                {selectedBranch && (
+                    <MultiSelect 
+                        mode='default'
+                        style={globalStyles.dropdown}
+                        placeholderStyle={globalStyles.placeholder}
+                        selectedTextStyle={globalStyles.selectedText}
+                        inputSearchStyle={globalStyles.inputSearchStyle}
+                        itemTextStyle={globalStyles.itemTextStyle}
+                        selectedStyle={globalStyles.selectedStyle}
+                        activeColor={theme.secondary}
+                        data={warehouseList[selectedBranch].map((warehouse) => ({
+                            label: `${warehouse.WhseDescription}\n${warehouse.WhseID}`,
+                            value: warehouse.WhseID
+                        }))}
+                        value={selectedWarehouses}
+                        placeholder='Select warehouse(s)'
+                        searchPlaceholder='Search warehouses'
+                        search
+                        maxHeight={300}
+                        labelField='label'
+                        valueField='value'
+                        onChange={item => {
+                            setSelectedWarehouses(item);
+                        }}
+                        renderLeftIcon={() => (
+                            <MaterialCommunityIcons 
+                                color={theme.secondary}
+                                size={20}
+                                name='warehouse'
+                                style={{padding: 5}}
+                            />
+                        )}
+                        renderSelectedItem={(item, unSelect) => (
+                            <Button 
+                                title={item.value}
+                                onPress={() => unSelect && unSelect(item)}
+                                buttonStyle={globalStyles.selectedButton}
+                                icon={(
+                                    <AntDesign 
+                                        size={22}
+                                        color={theme.constant.error}
+                                        name='closecircle'
+                                    />
+                                )}
+                                iconPosition='right'
+                            />
+                        )}
+                    />
+                )}
+                {(selectedBranch && selectedWarehouses.length !== 0) && (
+                    <Button
+                        title='Start Survey'
+                        onPress={handleStartSurvey}
+                        buttonStyle={[globalStyles.button, globalStyles.buttonSecondary]}
+                    />
+                )}
 			</SafeAreaView>
-		</>
+		</ScrollView>
 	);
 }
