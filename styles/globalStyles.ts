@@ -24,7 +24,7 @@ const useGlobalStyles = () => {
 			backgroundColor: theme.background,
 		},
 		iconContainer: {
-			paddingHorizontal: 5
+			paddingHorizontal: 8
 		},
 		/* -- CONTENT -- */
 		image: {
