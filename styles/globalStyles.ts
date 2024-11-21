@@ -110,7 +110,7 @@ const useGlobalStyles = () => {
 		},
 		/* -- SPECIAL -- */
 		line: {
-			borderWidth: 2,
+			borderWidth: 1,
 			borderColor: theme.border,
 			width: '100%',
 			marginVertical: 5,
