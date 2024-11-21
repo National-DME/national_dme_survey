@@ -11,7 +11,7 @@ const useGlobalStyles = () => {
 		container: {
 			flex: 1,
 			justifyContent: 'flex-start',
-			alignItems: 'center',
+			//alignItems: 'center',
 			backgroundColor: theme.background,
 			padding: 10,
             marginVertical: 10
@@ -67,14 +67,15 @@ const useGlobalStyles = () => {
 		button: {
 			backgroundColor: theme.primary,
 			borderRadius: 10,
-			margin: 10,
+			marginVertical: 10,
 			paddingHorizontal: 15,
-			paddingVertical: 10
+			paddingVertical: 10,
 		},
 		buttonLabel: {
 			fontFamily: 'Nunito',
 			fontSize: 20,
 			color: theme.text,
+			textAlign: 'center'
 		},
 		buttonPrimary: {
 			backgroundColor: theme.primary,
@@ -107,6 +108,39 @@ const useGlobalStyles = () => {
 		listItem: {
 			flexDirection: 'row',
 			justifyContent: 'flex-start',
+		},
+		/* -- DROPDOWN -- */
+		dropdown: {
+			height: 50,
+			borderColor: theme.border,
+			borderWidth: 0.5,
+			borderRadius: 8,
+			paddingHorizontal: 8,
+			marginVertical: 10
+		},
+		placeholder: {
+			color: theme.border,
+			fontFamily: 'Nunito'
+		},
+		selectedText: {
+			color: theme.text,
+			fontFamily: 'Nunito',
+		},
+		selectedStyle: {
+			borderColor: theme.border,
+			borderRadius: 8,
+		},
+		inputSearchStyle: {
+			fontFamily: 'Nunito',
+			borderRadius: 8,
+			color: theme.border
+		},
+		itemTextStyle: {
+			fontFamily: 'Nunito',
+			color: theme.border
+		},
+		containerStyle: {
+			backgroundColor: theme.border
 		},
 		/* -- SPECIAL -- */
 		line: {

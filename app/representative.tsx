@@ -7,6 +7,8 @@ import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Button from '../components/generic/Button';
 import { endpoints } from '../utils/network/endpoints';
+import { Dropdown, MultiSelect } from 'react-native-element-dropdown';
+import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
 
 /**
  * Represents a warehouse object returned from the server
@@ -39,7 +41,8 @@ export default function RepresentativeScreen() {
 	>([]);
 
 	// Branch state variable that holds the possible branches to select from
-	const [branches, setBranches] = useState<string[]>([]);
+	const [branches, setBranches] = useState<{ label: string, value: string}[]>([]);
+    const [selectedWarehouses, setSelectedWarehouses] = useState<string[]>([]);
 
 	/**
      * Initializes the warehouse data for the screen by:
@@ -62,13 +65,15 @@ export default function RepresentativeScreen() {
 			// Compile the branch/warehouse data into usable structures
 			const compiledData = separateBranchesAndGroup(warehouses);
 
-            console.log(compiledData);
-
 			// Set state variables
 			setBranches(compiledData.branches);
 			setWarehouseList(compiledData.groupedWarehouses);
 		})();
 	}, []);
+
+    useEffect(() => {
+        console.log(selectedWarehouses);
+    }, [selectedWarehouses]);
 
 	/**
 	 * Separates a list of warehouses into unique branch IDs and groups warehouses by their branches.
@@ -84,13 +89,18 @@ export default function RepresentativeScreen() {
 	const separateBranchesAndGroup = (
 		warehouses: Warehouse[]
 	): {
-		branches: string[];
+		branches: { label: string, value: string }[];
 		groupedWarehouses: Record<string, Warehouse[]>;
 	} => {
 		// Separate branch id of each warehouse pulled
-		const branches = [
+		const branchArray = [
 			...new Set(warehouses.map((warehouse) => warehouse.BranchWhseID)),
 		];
+
+        const branches = branchArray.map((branch) => ({
+            label: branch,
+            value: branch
+        }));
 
 		// Reduce the warehouse list to arrays separated by branch
 		const groupedWarehouses = warehouses.reduce((accumulator, warehouse) => {
@@ -157,9 +167,61 @@ export default function RepresentativeScreen() {
 					you’re at. This ensures the responses are linked to the right
 					location.
 				</Text>
-				<Text style={globalStyles.subtitle}>
-					{branches.length} branches
-				</Text>
+				<Dropdown 
+                    mode='default'
+                    style={globalStyles.dropdown}
+                    placeholderStyle={globalStyles.placeholder}
+                    selectedTextStyle={globalStyles.selectedText}
+                    inputSearchStyle={globalStyles.inputSearchStyle}
+                    itemTextStyle={globalStyles.itemTextStyle}
+                    activeColor={theme.secondary}
+                    data={branches}
+                    placeholder='Select branch'
+                    searchPlaceholder='Search branches...'
+                    maxHeight={300}
+                    labelField='label'
+                    valueField='value'
+                    onChange={item => {
+                        console.log(item);
+                    }}
+                    renderLeftIcon={() => (
+                        <MaterialCommunityIcons 
+                            color={theme.secondary}
+                            size={20}
+                            name='source-branch'
+                            style={{padding: 5}}
+                        />
+                    )}
+                />
+				<MultiSelect 
+                    mode='default'
+                    style={globalStyles.dropdown}
+                    placeholderStyle={globalStyles.placeholder}
+                    selectedTextStyle={globalStyles.selectedText}
+                    inputSearchStyle={globalStyles.inputSearchStyle}
+                    itemTextStyle={globalStyles.itemTextStyle}
+                    selectedStyle={globalStyles.selectedStyle}
+                    activeColor={theme.secondary}
+                    data={branches}
+                    value={selectedWarehouses}
+                    placeholder='Select warehouse(s)'
+                    searchPlaceholder='Search warehouses'
+                    search
+                    maxHeight={300}
+                    labelField='label'
+                    valueField='value'
+                    onChange={item => {
+                        setSelectedWarehouses(item);
+                    }}
+                    renderLeftIcon={() => (
+                        <MaterialCommunityIcons 
+                            color={theme.secondary}
+                            size={20}
+                            name='warehouse'
+                            style={{padding: 5}}
+                        />
+                    )}
+                />
 				<Button
 					title='Start Survey'
 					onPress={handleStartSurvey}
