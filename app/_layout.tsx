@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { theme } from "../styles/theme";
 import * as SystemUI from 'expo-system-ui';
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { SurveyContextProvider } from "../context/SurveyContext";
 
 /**
  * 
@@ -43,13 +44,13 @@ const Root = () => {
     }
 
     return (
-        <>
+        <SurveyContextProvider>
             <GestureHandlerRootView style={{
                 flex: 1, backgroundColor: theme.background
             }}>
                 <Slot />
             </GestureHandlerRootView>
-        </>
+        </SurveyContextProvider>
     ); 
 }
 
