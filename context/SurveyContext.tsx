@@ -1,5 +1,6 @@
 import { createContext, useContext, ReactNode, useState, useEffect } from 'react';
 import { endpoints } from '../utils/network/endpoints';
+import { QuestionInterface } from '../components/Question';
 
 export interface SurveyContextInterface {
     warehouseList: Record<string, Warehouse[]>;
@@ -52,6 +53,11 @@ export const SurveyContextProvider: React.FC<{ children: ReactNode }> = ({ child
 	 */
 	const [selectedWarehouses, setSelectedWarehouses] = useState<string[]>([]);
 
+	/**
+	 * Represents the questions that the survey will be made out of
+	 */
+	const [questions, setQuestions] = useState<QuestionInterface[]>([]);
+
     /**
      * Effect that runs context mount
      * 
@@ -62,6 +68,7 @@ export const SurveyContextProvider: React.FC<{ children: ReactNode }> = ({ child
         (async () => {
             // Initialize context state
             await getAndSetWarehouseData();
+			await getAndSetQuestions();
         })();
     }, []);
 
@@ -100,6 +107,31 @@ export const SurveyContextProvider: React.FC<{ children: ReactNode }> = ({ child
 	};
 
 	/**
+	 * Fetches the list of questions from the server
+	 * 
+	 * This function sends a POST request to the `BASE_URL` with the 'endpointname' field set to `Get
+	 */
+	const getQuestions = async (): Promise<Warehouse[]> => {
+		try {
+			const data = new FormData();
+			data.append('endpointname', endpoints.getQuestions);
+
+			const response = await fetch(endpoints.BASE_URL, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'multipart/form-data',
+				},
+				body: data
+			});
+
+			return await response.json();
+		} catch (error) {
+			console.error(error);
+			throw error;
+		}
+	}
+
+	/**
 	 * Separates a list of warehouses into unique branch IDs and groups warehouses by their branches.
 	 *
 	 * @param {Warehouse[]} warehouses - The list of all available warehouses pulled from the server.
@@ -124,7 +156,7 @@ export const SurveyContextProvider: React.FC<{ children: ReactNode }> = ({ child
 		// Reduce the warehouse list to arrays separated by branch
 		const groupedWarehouses = warehouses.reduce((accumulator, warehouse) => {
 			const branchId = warehouse.BranchWhseID.trim();
-			
+
 			if (!accumulator[branchId]) {
 				accumulator[branchId] = [];
 			}
@@ -155,6 +187,15 @@ export const SurveyContextProvider: React.FC<{ children: ReactNode }> = ({ child
             // Set branch and warehouse list state
             setBranches(compileData.branches);
             setWarehouseList(compileData.groupedWarehouses);
+		} catch (error) {
+			throw error;
+		}
+	};
+
+	const getAndSetQuestions = async () => {
+		try {
+			const questions = await getQuestions();
+			console.log(questions);
 		} catch (error) {
 			throw error;
 		}
