@@ -6,11 +6,12 @@ import Answer from './Answer';
 /**
  * @text is the question being asked
  * @type is the type of question
- * @answers optional; are the associated answers; only used with radio and check lists
+ * @answers optional; Are the associated answers; Only used with radio and check lists
+ * @placeholder optional; Placeholder in the text answer TextInput tag; Only used with text answers
  */
 export interface BaseQuestion {
 	text: string;
-    key: number;
+    key: number | 'DEPARTMENT' | 'NAME' | 'COMMENT';
 }
 
 export interface RadioListQuestion extends BaseQuestion {
@@ -59,11 +60,11 @@ export default function Question({ question, index }: QuestionProps) {
             <View style={globalStyles.questionTextContainer}>
                 <Text style={globalStyles.question}>{question.text}</Text>
                 {question.type === 'radio list' || question.type === 'check list' ? (
-                    <Answer type={question.type} answers={question.answers} />
+                    <Answer question={question} type={question.type} answers={question.answers} />
                 ) : question.type === 'text' ? (
-                    <Answer type={question.type} placeholder={question.placeholder} />
+                    <Answer question={question} type={question.type} placeholder={question.placeholder} />
                 ) : (
-                    <Answer type={question.type} />
+                    <Answer question={question} type={question.type} />
                 )}
             </View>
         </View>

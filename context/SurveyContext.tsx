@@ -21,6 +21,9 @@ export interface SurveyContextInterface {
 	selectedBranch: string;
 	setSelectedBranch: (branch: string) => void;
 	survey: QuestionInterface[];
+	handleAnswer: (answer: SurveyAnswerInterface) => void;
+	answers: SurveyAnswerInterface[];
+	currentAnswer: (key: QuestionInterface['key']) => SurveyAnswerInterface['answer'] | undefined;
 }
 
 /**
@@ -62,9 +65,14 @@ export interface Department {
  * 
  * groupedWarehouses is an object with a string key and an array of warehouses as the value
  */
-type BranchGroup = {
+export interface BranchGroup {
 	branches: string[];
 	groupedWarehouses: Record<string, Warehouse[]>;
+}
+
+export interface SurveyAnswerInterface {
+	questionKey: QuestionInterface['key'];
+	answer: string | string[] | number | null;
 }
 
 export const SurveyContext = createContext<SurveyContextInterface | null>(null);
@@ -101,10 +109,7 @@ export const SurveyContextProvider: React.FC<{ children: ReactNode }> = ({
 	 */
 	const [survey, setSurvey] = useState<QuestionInterface[]>([]);
 
-	/**
-	 * Represents the different departments that personnel can choose from
-	 */
-	const [departments, setDepartments] = useState<Department[]>([]);
+	const [answers, setAnswers] = useState<SurveyAnswerInterface[]>([]);
 
 	/**
 	 * Effect that runs context mount
@@ -115,11 +120,42 @@ export const SurveyContextProvider: React.FC<{ children: ReactNode }> = ({
 	useEffect(() => {
 		(async () => {
 			// Initialize context state
+			console.log('Initializing');
 			await handleWarehouses();
 			await handleQuestions();
-			await handleDepartments();
 		})();
 	}, []);
+
+	useEffect(() => {
+		console.log(answers);
+	}, [answers]);
+
+	useEffect(() => {
+		if (!survey) return;
+		console.log(survey);
+	}, [survey]);
+
+	const handleAnswer = (answer: SurveyAnswerInterface): void => {
+		setAnswers((prevAnswers) => {
+			const existingAnswerIndex = prevAnswers.findIndex(
+				(existingAnswer) => existingAnswer.questionKey === answer.questionKey
+			);
+
+			if (existingAnswerIndex >= 0) {
+				// If the question has already been answered, update it
+				const updatedAnswers = [...prevAnswers];
+				updatedAnswers[existingAnswerIndex] = answer;
+				return updatedAnswers;
+			} else {
+				// It's a question that has not yet been answered
+				return [...prevAnswers, answer];
+			}
+		});
+	};
+
+	const currentAnswer = (key: QuestionInterface['key']): SurveyAnswerInterface['answer'] | undefined => {
+		return answers.find((answer) => answer.questionKey === key)?.answer;
+	}
 
 	/**
 	 * Fetches the list of warehouses from the server.
@@ -133,6 +169,7 @@ export const SurveyContextProvider: React.FC<{ children: ReactNode }> = ({
 	 * @throws {Error} If the fetch request fails or the server returns an invalid response, the error is logged and rethrown.
 	 */
 	const getWarehouseList = async (): Promise<Warehouse[]> => {
+		console.log('Getting list of warehouses');
 		try {
 			// Create the form data needed to send to the endpoint
 			const data = new FormData();
@@ -165,6 +202,7 @@ export const SurveyContextProvider: React.FC<{ children: ReactNode }> = ({
 	 * @returns void
 	 */
 	const handleWarehouses = async () => {
+		console.log('Compiling and setting list of warehouses');
 		try {
 			// Fetch warehouses from server as Warehouse[]
 			const warehouses = await getWarehouseList();
@@ -192,9 +230,11 @@ export const SurveyContextProvider: React.FC<{ children: ReactNode }> = ({
 	 * @throws {Error} If the fetch request fails or the server returns an invalid response, the error is logged and rethrown.
 	 */
 	const getDepartments = async (): Promise<Department[]> => {
+		console.log('Getting departments from server');
 		try {
 			const data = new FormData();
 			data.append('endpointname', endpoints.getDepartments);
+			data.append('usertoken', 'key here');
 
 			const response = await fetch(endpoints.BASE_URL, {
 				method: 'POST',
@@ -210,12 +250,13 @@ export const SurveyContextProvider: React.FC<{ children: ReactNode }> = ({
 		}
 	};
 
-	const handleDepartments = async (): Promise<void> => {
+	const handleDepartments = async (): Promise<Department[]> => {
+		console.log('Returning departments from server');
 		try {
 			const departments = (await getDepartments()) as Department[];
-			setDepartments(departments);
+			return departments;
 		} catch (error) {
-			console.log(error);
+			console.log(error, 'handleDepartments');
 			throw error;
 		}
 	};
@@ -227,9 +268,11 @@ export const SurveyContextProvider: React.FC<{ children: ReactNode }> = ({
 	 * @returns {Promise<QuestionCall[]>} An array of questions from the API call
 	 */
 	const getQuestions = async (): Promise<QuestionCall[]> => {
+		console.log('Getting questions from server');
 		try {
 			const data = new FormData();
 			data.append('endpointname', endpoints.getQuestions);
+			data.append('usertoken', 'key here');
 
 			const response = await fetch(endpoints.BASE_URL, {
 				method: 'POST',
@@ -241,7 +284,7 @@ export const SurveyContextProvider: React.FC<{ children: ReactNode }> = ({
 
 			return (await response.json()) as QuestionCall[];
 		} catch (error) {
-			console.error(error);
+			console.error(error, 'getQuestions');
 			throw error;
 		}
 	};
@@ -250,11 +293,14 @@ export const SurveyContextProvider: React.FC<{ children: ReactNode }> = ({
 	 * Parent function that runs the questions call, compiles the survey and sets the survey state
 	 */
 	const handleQuestions = async (): Promise<void> => {
+		console.log('Compiling final survey');
 		try {
 			const questions = (await getQuestions()) as QuestionCall[];
-			const compiledSurvey = compileQuestions(questions);
+			const departments = await handleDepartments();
+			const compiledSurvey = compileQuestions(questions, departments);
 			setSurvey(compiledSurvey);
 		} catch (error) {
+			console.log(error, 'handleQuestions');
 			throw error;
 		}
 	};
@@ -273,6 +319,7 @@ export const SurveyContextProvider: React.FC<{ children: ReactNode }> = ({
 	const separateBranchesAndGroup = (
 		warehouses: Warehouse[]
 	): BranchGroup => {
+		console.log('Processing branches and groups of warehouses');
 		// Separate branch id of each warehouse pulled
 		const branches = [
 			...new Set(
@@ -303,8 +350,10 @@ export const SurveyContextProvider: React.FC<{ children: ReactNode }> = ({
 	 * @returns A survey of questions, compatible with the survey screen that renders the questions
 	 */
 	const compileQuestions = (
-		rawQuestionData: QuestionCall[]
+		rawQuestionData: QuestionCall[],
+		departments: Department[]
 	): QuestionInterface[] => {
+		console.log('Generating questions');
 		const survey = rawQuestionData.map(
 			(question): QuestionInterface => ({
 				text: `${question.QuestionDesc}?`,
@@ -313,20 +362,18 @@ export const SurveyContextProvider: React.FC<{ children: ReactNode }> = ({
 			})
 		);
 
-		// TODO figure out what to do with the key properties in the questions below
-
 		// Add name question to the top
 		const nameQuestion: QuestionInterface = {
 			text: 'What is your first and last name?',
 			type: 'text',
-			key: 0,
+			key: 'NAME',
 			placeholder: 'Your complete name',
 		};
 
 		const departmentQuestion: QuestionInterface = {
-			text: 'What department / position do you belong do?',
+			text: `What department / position do you belong do?${departments.length}`,
 			type: 'radio list',
-			key: 0,
+			key: 'DEPARTMENT',
 			answers: departments.map((department) => department.DeptDesc),
 		};
 
@@ -334,7 +381,7 @@ export const SurveyContextProvider: React.FC<{ children: ReactNode }> = ({
 		const commentQuestion: QuestionInterface = {
 			text: 'Do you have any additional comments?',
 			type: 'text',
-			key: 0,
+			key: 'COMMENT',
 			placeholder: 'Comments',
 		};
 
@@ -352,6 +399,9 @@ export const SurveyContextProvider: React.FC<{ children: ReactNode }> = ({
 				selectedBranch,
 				setSelectedBranch,
 				survey,
+				handleAnswer,
+				answers,
+				currentAnswer
 			}}>
 			{children}
 		</SurveyContext.Provider>

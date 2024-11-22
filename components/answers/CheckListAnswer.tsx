@@ -4,11 +4,11 @@ import { Checkbox } from 'react-native-paper';
 import useGlobalStyles from '../../styles/globalStyles';
 import { theme } from '../../styles/theme';
 
-export interface CheckListInterface {
+export interface CheckListAnswerProps {
 	answers: string[];
 }
 
-export default function CheckListAnswer(props: CheckListInterface) {
+export default function CheckListAnswer(props: CheckListAnswerProps) {
 	const globalStyles = useGlobalStyles();
 	const [checkedState, setCheckedState] = useState<boolean[]>(
 		props.answers.map(() => false)

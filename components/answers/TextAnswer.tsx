@@ -1,23 +1,39 @@
 import { View, Text, TextInput } from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import useGlobalStyles from '../../styles/globalStyles';
 import { theme } from '../../styles/theme';
+import { useSurvey } from '../../context/SurveyContext';
+import { AnswerBase } from '../Answer';
 
-export interface TextAnswerProps {
+export interface TextAnswerProps extends AnswerBase {
+	type: 'text';
 	placeholder: string;
 }
 
-export default function TextAnswer({ placeholder }: TextAnswerProps) {
+export default function TextAnswer(props: TextAnswerProps) {
 	const globalStyles = useGlobalStyles();
+	const { handleAnswer } = useSurvey();
 
 	const [answer, setAnswer] = useState<string>('');
 	const [focused, setFocused] = useState<boolean>(false);
+
+	// Third of a second
+	const DEBOUNCE_DELAY = 300;
+
+	useEffect(() => {
+		// Debounce local answer to not update context too often (for performance reasons)
+		const timeoutId = setTimeout(() => {
+			handleAnswer({questionKey: props.question.key, answer});
+		}, DEBOUNCE_DELAY);
+
+		return () => clearTimeout(timeoutId);
+	}, [answer]);
 
 	return (
 		<View style={globalStyles.textContainer}>
 			<TextInput 
 				value={answer}
-				placeholder={placeholder}
+				placeholder={props.placeholder}
 				placeholderTextColor={theme.border}
 				multiline
 				style={[globalStyles.textInputAnswer, focused && globalStyles.textInputFocused]}

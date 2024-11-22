@@ -3,14 +3,15 @@ import React, { useState } from 'react';
 import { theme } from '../../styles/theme';
 import useGlobalStyles from '../../styles/globalStyles';
 import Button from '../generic/Button';
+import { useSurvey } from '../../context/SurveyContext';
+import { AnswerBase } from '../Answer';
 
-export default function RatingAnswer() {
+export default function RatingAnswer(props: AnswerBase) {
     const globalStyles = useGlobalStyles();
-    
-    const [selectedRating, setSelectedRating] = useState<number | null>(null);
+    const { currentAnswer, handleAnswer } = useSurvey();
 
     const handleRating = (rating: number) => {
-        setSelectedRating(rating);
+        handleAnswer({questionKey: props.question.key, answer: rating})
     }
 
 	return (
@@ -22,8 +23,8 @@ export default function RatingAnswer() {
                     onPress={() => handleRating(rating)} 
                     buttonStyle={[
                         globalStyles.ratingBlock,
-                        rating === selectedRating && globalStyles.selectedRatingBlock
-                    ]} 
+                        rating === currentAnswer(props.question.key) && globalStyles.selectedRatingBlock
+                    ]}
                 />
             ))}
         </View>

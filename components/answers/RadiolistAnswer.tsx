@@ -3,17 +3,19 @@ import React, { useState } from 'react';
 import useGlobalStyles from '../../styles/globalStyles';
 import { RadioButton } from 'react-native-paper';
 import { theme } from '../../styles/theme';
+import { useSurvey } from '../../context/SurveyContext';
+import { AnswerBase } from '../Answer';
 
-export interface RadioListInterface {
+export interface RadioListAnswerProps extends AnswerBase {
 	answers: string[];
 }
 
-export default function RadioListAnswer(props: RadioListInterface) {
+export default function RadioListAnswer(props: RadioListAnswerProps) {
 	const globalStyles = useGlobalStyles();
-	const [selected, setSelected] = useState('');
+	const { currentAnswer, handleAnswer } = useSurvey();
 
-	const handleSelection = (value: string) => {
-		setSelected(value);
+	const handleSelection = (answer: string) => {
+		handleAnswer({questionKey: props.question.key, answer});
 	}
 
 	return (
@@ -22,7 +24,7 @@ export default function RadioListAnswer(props: RadioListInterface) {
 				<View key={index} style={globalStyles.listItem}>
 					<RadioButton 
 						value={answer}
-						status={selected === answer ? 'checked' : 'unchecked'}
+						status={currentAnswer(props.question.key) === answer ? 'checked' : 'unchecked'}
 						onPress={() => handleSelection(answer)}
 						color={theme.accent.gradient1.toString()}
 						uncheckedColor={theme.border.toString()}
