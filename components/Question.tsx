@@ -29,6 +29,7 @@ export interface RatingQuestion extends BaseQuestion {
 
 export interface TextQuestion extends BaseQuestion {
 	type: 'text'; // No `answers`
+    placeholder: string;
 }
 
 // Includes question interface with an index property
@@ -59,6 +60,8 @@ export default function Question({ question, index }: QuestionProps) {
                 <Text style={globalStyles.question}>{question.text}</Text>
                 {question.type === 'radio list' || question.type === 'check list' ? (
                     <Answer type={question.type} answers={question.answers} />
+                ) : question.type === 'text' ? (
+                    <Answer type={question.type} placeholder={question.placeholder} />
                 ) : (
                     <Answer type={question.type} />
                 )}

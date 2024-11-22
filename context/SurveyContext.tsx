@@ -8,6 +8,11 @@ import {
 import { endpoints } from '../utils/network/endpoints';
 import { QuestionInterface, RatingQuestion } from '../components/Question';
 
+/**
+ * Exposed functions/state variables of the context
+ * 
+ * Used by children of the context
+ */
 export interface SurveyContextInterface {
 	warehouseList: Record<string, Warehouse[]>;
 	branches: string[];
@@ -30,11 +35,23 @@ export interface Warehouse {
 	WhseDescription: string;
 }
 
+/**
+ * Represents the question object received in the array of questions from server
+ */
 export interface QuestionCall {
 	BranchID: number;
 	IsAll: number;
 	QuestionDesc: string;
 	QuestionKey: number;
+	Status: number;
+}
+
+/**
+ * Represents the department structure
+ */
+export interface Department {
+	DeptKey: number;
+	DeptDesc: string;
 	Status: number;
 }
 
@@ -73,6 +90,11 @@ export const SurveyContextProvider: React.FC<{ children: ReactNode }> = ({
 	const [survey, setSurvey] = useState<QuestionInterface[]>([]);
 
 	/**
+	 * Represents the different departments that personnel can choose from 
+	 */
+	const [departments, setDepartments] = useState<Department[]>([]);
+
+	/**
 	 * Effect that runs context mount
 	 *
 	 * Calls server; Compiles data; Initializes and sets state variables;
@@ -83,6 +105,7 @@ export const SurveyContextProvider: React.FC<{ children: ReactNode }> = ({
 			// Initialize context state
 			await getAndSetWarehouseData();
 			await getAndSetQuestions();
+			await handleDepartments();
 		})();
 	}, []);
 
@@ -119,6 +142,46 @@ export const SurveyContextProvider: React.FC<{ children: ReactNode }> = ({
 			throw error;
 		}
 	};
+
+	/**
+	 * Fetches the list of departments from the server
+	 * 
+	 * This function sends a POST request to the `BASE_URL` with the 'endpointname' field set to `Get_SurveyDepartments` using FormData.
+	 * The server responds with a list of warehouses available for selection. The response is parsed as JSON and returned 
+	 *  
+	 * @async
+	 * @function
+	 * @returns {Promise<Department[]>} A promise that resolves to an array of `Department` objects representing the available Departments that the clinical personnel can choose from
+	 * @throws {Error} If the fetch request fails or the server returns an invalid response, the error is logged and rethrown.
+	 */
+	const getDepartments = async (): Promise<Department[]> => {
+		try {
+			const data = new FormData();
+			data.append('endpointname', endpoints.getDepartments);
+
+			const response = await fetch(endpoints.BASE_URL, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'multipart/form-data',
+				},
+				body: data
+			});
+
+			return (await response.json()) as Department[];
+		} catch (error) {
+			throw error;
+		}
+	}
+
+	const handleDepartments = async (): Promise<void> => {
+		try {
+			const departments = (await getDepartments()) as Department[];
+			setDepartments(departments);
+		} catch (error) {
+			console.log(error);
+			throw error;
+		}
+	}
 
 	/**
 	 * Fetches the list of questions from the server
@@ -211,16 +274,45 @@ export const SurveyContextProvider: React.FC<{ children: ReactNode }> = ({
 	 * @param rawQuestionData Takes in the question data from the server
 	 * @returns A survey of questions, compatible with the survey screen that renders the questions
 	 */
-	const compileQuestions = (rawQuestionData: QuestionCall[]): RatingQuestion[] => {
-		const survey = rawQuestionData.map((question) => ({
-			text: question.QuestionDesc,
-			type: 'rating' as RatingQuestion['type'],
+	const compileQuestions = (rawQuestionData: QuestionCall[]): QuestionInterface[] => {
+		const survey = rawQuestionData.map((question): QuestionInterface => ({
+			text: `${question.QuestionDesc}?`,
+			type: 'rating',
 			key: question.QuestionKey
 		}));
 
-		return survey;
+		// TODO figure out what to do with the key properties in the questions below
+
+		// Add name question to the top
+		const nameQuestion: QuestionInterface = {
+			text: 'What is your first and last name?',
+			type: 'text',
+			key: 0,
+			placeholder: 'Your complete name'
+		};
+
+		const departmentQuestion: QuestionInterface = {
+			text: 'What department / position do you belong do?',
+			type: 'radio list',
+			key: 0,
+			answers: departments.map((department) => department.DeptDesc)
+		}
+
+		// Add comments question to the bottom
+		const commentQuestion: QuestionInterface = {
+			text: 'Do you have any additional comments?',
+			type: 'text',
+			key: 0,
+			placeholder: 'Comments'
+		}
+
+		// Returning a complete survey
+		return [nameQuestion, departmentQuestion, ...survey, commentQuestion];
 	}
 
+	/**
+	 * Parent function that runs the questions call, compiles the survey and sets the survey state
+	 */
 	const getAndSetQuestions = async (): Promise<void> => {
 		try {
 			const questions = (await getQuestions()) as QuestionCall[];

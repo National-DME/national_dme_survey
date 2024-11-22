@@ -24,7 +24,7 @@ export default function RadioListAnswer(props: RadioListInterface) {
 						value={answer}
 						status={selected === answer ? 'checked' : 'unchecked'}
 						onPress={() => handleSelection(answer)}
-						color={theme.secondary.toString()}
+						color={theme.accent.gradient1.toString()}
 						uncheckedColor={theme.border.toString()}
 					/>
 					<Text style={globalStyles.answer}>

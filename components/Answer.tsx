@@ -31,6 +31,7 @@ export interface CheckListAnswerProps extends AnswerPropsBase {
 
 export interface TextAnswerProps extends AnswerPropsBase {
     type: 'text';
+    placeholder: string;
 }
 
 type AnswerProps = 
@@ -54,7 +55,7 @@ export default function Answer(props: AnswerProps) {
                 <RatingAnswer />
             )}
             {props.type === 'text' && (
-                <TextAnswer />
+                <TextAnswer placeholder={props.placeholder} />
             )}
 		</View>
 	);

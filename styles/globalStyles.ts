@@ -24,7 +24,7 @@ const useGlobalStyles = () => {
 			backgroundColor: theme.background,
 		},
 		iconContainer: {
-			paddingHorizontal: 8
+			paddingHorizontal: 8,
 		},
 		/* -- CONTENT -- */
 		image: {
@@ -93,9 +93,27 @@ const useGlobalStyles = () => {
 			backgroundColor: theme.accent.primary,
 		},
 		/* -- INPUTS -- */
+		textContainer: {
+			alignItems: 'center',
+		},
 		textInput: {
 			backgroundColor: theme.background,
-			width: '85%',
+			width: '90%',
+			textAlignVertical: 'top',
+			margin: 10,
+			padding: 8,
+			borderWidth: 0.5,
+			borderRadius: 8,
+			borderColor: theme.border,
+			fontFamily: 'Nunito',
+			fontSize: 20,
+			color: theme.text,
+		},
+		textInputAnswer: {
+			backgroundColor: theme.background,
+			width: '90%',
+			height: 100,
+			textAlignVertical: 'top',
 			margin: 10,
 			padding: 8,
 			borderWidth: 0.5,
@@ -106,7 +124,7 @@ const useGlobalStyles = () => {
 			color: theme.text,
 		},
 		textInputFocused: {
-			borderColor: theme.secondary,
+			borderColor: theme.accent.gradient1,
 		},
 		answerListContainer: {
 			justifyContent: 'flex-start',
@@ -199,7 +217,7 @@ const useGlobalStyles = () => {
 			width: '100%',
 			flexDirection: 'row',
 			justifyContent: 'space-evenly',
-			alignItems: 'center'
+			alignItems: 'center',
 		},
 		ratingBlock: {
 			backgroundColor: theme.background,
@@ -207,12 +225,12 @@ const useGlobalStyles = () => {
 			borderRadius: 8,
 			borderColor: theme.text,
 			paddingVertical: 10,
-			paddingHorizontal: 15
+			paddingHorizontal: 15,
 		},
 		selectedRatingBlock: {
 			backgroundColor: theme.accent.gradient1,
-			borderColor: theme.accent.gradient1
-		}
+			borderColor: theme.accent.gradient1,
+		},
 	});
 };
 
