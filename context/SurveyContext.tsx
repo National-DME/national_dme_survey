@@ -55,6 +55,18 @@ export interface Department {
 	Status: number;
 }
 
+/**
+ * Represents the return type of the separateBranchesAndGroup function
+ * 
+ * branches is a group of strings
+ * 
+ * groupedWarehouses is an object with a string key and an array of warehouses as the value
+ */
+type BranchGroup = {
+	branches: string[];
+	groupedWarehouses: Record<string, Warehouse[]>;
+}
+
 export const SurveyContext = createContext<SurveyContextInterface | null>(null);
 
 export const SurveyContextProvider: React.FC<{ children: ReactNode }> = ({
@@ -260,7 +272,7 @@ export const SurveyContextProvider: React.FC<{ children: ReactNode }> = ({
 	 */
 	const separateBranchesAndGroup = (
 		warehouses: Warehouse[]
-	) => {
+	): BranchGroup => {
 		// Separate branch id of each warehouse pulled
 		const branches = [
 			...new Set(
