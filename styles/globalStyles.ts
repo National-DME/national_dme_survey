@@ -11,7 +11,7 @@ const useGlobalStyles = () => {
 		container: {
 			flex: 1,
 			justifyContent: 'flex-start',
-			//alignItems: 'center',
+			alignItems: 'center',
 			backgroundColor: theme.background,
 			padding: 8,
 			marginVertical: 10,
@@ -27,6 +27,15 @@ const useGlobalStyles = () => {
 			paddingHorizontal: 8,
 		},
 		/* -- CONTENT -- */
+		error: {
+			backgroundColor: theme.constant.error,
+			color: theme.text,
+			textAlign: 'center',
+			fontFamily: 'Nunito',
+			fontSize: 20,
+			padding: 15,
+			borderRadius: 8
+		},
 		image: {
 			width: 130,
 			height: 130,
