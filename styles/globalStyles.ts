@@ -195,6 +195,24 @@ const useGlobalStyles = () => {
 			flexDirection: 'column',
 			marginVertical: 10,
 		},
+		ratingAnswerContainer: {
+			width: '100%',
+			flexDirection: 'row',
+			justifyContent: 'space-evenly',
+			alignItems: 'center'
+		},
+		ratingBlock: {
+			backgroundColor: theme.background,
+			borderWidth: 0.5,
+			borderRadius: 8,
+			borderColor: theme.text,
+			paddingVertical: 10,
+			paddingHorizontal: 15
+		},
+		selectedRatingBlock: {
+			backgroundColor: theme.accent.gradient1,
+			borderColor: theme.accent.gradient1
+		}
 	});
 };
 

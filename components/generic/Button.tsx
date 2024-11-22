@@ -5,7 +5,7 @@ import useGlobalStyles from '../../styles/globalStyles';
 export interface ButtonProps {
     title: string;
     onPress: () => void;
-    buttonStyle?: ViewStyle | ViewStyle[];
+    buttonStyle?: ViewStyle | (ViewStyle | undefined | false | null)[];
     textStyle?: TextStyle;
     disabled?: boolean;
     icon?: ReactNode;
@@ -14,9 +14,13 @@ export interface ButtonProps {
 
 export default function Button(props: ButtonProps) {
     const globalStyles = useGlobalStyles();
+
+    const combinedButtonStyle = Array.isArray(props.buttonStyle)
+    ? [globalStyles.button, ...props.buttonStyle]
+    : [globalStyles.button, props.buttonStyle];
     
 	return (
-		<Pressable onPress={props.onPress} style={props.buttonStyle ? props.buttonStyle : globalStyles.button}>
+		<Pressable onPress={props.onPress} style={combinedButtonStyle}>
             {(props.icon && props.iconPosition === 'left') && (
                 <View style={globalStyles.iconContainer}>
                     {props.icon}
