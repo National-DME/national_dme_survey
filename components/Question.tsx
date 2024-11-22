@@ -10,6 +10,7 @@ import Answer from './Answer';
  */
 export interface BaseQuestion {
 	text: string;
+    key: number;
 }
 
 export interface RadioListQuestion extends BaseQuestion {
