@@ -90,7 +90,7 @@ export const SurveyContextProvider: React.FC<{ children: ReactNode }> = ({
 	const [survey, setSurvey] = useState<QuestionInterface[]>([]);
 
 	/**
-	 * Represents the different departments that personnel can choose from 
+	 * Represents the different departments that personnel can choose from
 	 */
 	const [departments, setDepartments] = useState<Department[]>([]);
 
@@ -103,8 +103,8 @@ export const SurveyContextProvider: React.FC<{ children: ReactNode }> = ({
 	useEffect(() => {
 		(async () => {
 			// Initialize context state
-			await getAndSetWarehouseData();
-			await getAndSetQuestions();
+			await handleWarehouses();
+			await handleQuestions();
 			await handleDepartments();
 		})();
 	}, []);
@@ -144,11 +144,36 @@ export const SurveyContextProvider: React.FC<{ children: ReactNode }> = ({
 	};
 
 	/**
+	 * Initializes the warehouse data by:
+	 * 1. Fetching the warehouse data from the get warehouses endpoint
+	 * 2. Creates an array of branches
+	 * 3. Creates an array of arrays of the warehouses with the warehouse id as the array index
+	 * 4. Sets the context branch and warehouse list state variables
+	 *
+	 * @returns void
+	 */
+	const handleWarehouses = async () => {
+		try {
+			// Fetch warehouses from server as Warehouse[]
+			const warehouses = await getWarehouseList();
+
+			// Compile raw warehouse data into branches and grouped warehouses
+			const compileData = separateBranchesAndGroup(warehouses);
+
+			// Set branch and warehouse list state
+			setBranches(compileData.branches);
+			setWarehouseList(compileData.groupedWarehouses);
+		} catch (error) {
+			throw error;
+		}
+	};
+
+	/**
 	 * Fetches the list of departments from the server
-	 * 
+	 *
 	 * This function sends a POST request to the `BASE_URL` with the 'endpointname' field set to `Get_SurveyDepartments` using FormData.
-	 * The server responds with a list of warehouses available for selection. The response is parsed as JSON and returned 
-	 *  
+	 * The server responds with a list of warehouses available for selection. The response is parsed as JSON and returned
+	 *
 	 * @async
 	 * @function
 	 * @returns {Promise<Department[]>} A promise that resolves to an array of `Department` objects representing the available Departments that the clinical personnel can choose from
@@ -164,14 +189,14 @@ export const SurveyContextProvider: React.FC<{ children: ReactNode }> = ({
 				headers: {
 					'Content-Type': 'multipart/form-data',
 				},
-				body: data
+				body: data,
 			});
 
 			return (await response.json()) as Department[];
 		} catch (error) {
 			throw error;
 		}
-	}
+	};
 
 	const handleDepartments = async (): Promise<void> => {
 		try {
@@ -181,12 +206,13 @@ export const SurveyContextProvider: React.FC<{ children: ReactNode }> = ({
 			console.log(error);
 			throw error;
 		}
-	}
+	};
 
 	/**
 	 * Fetches the list of questions from the server
 	 *
 	 * This function sends a POST request to the `BASE_URL` with the 'endpointname' field set to `Get_SurveyQuestions`
+	 * @returns {Promise<QuestionCall[]>} An array of questions from the API call
 	 */
 	const getQuestions = async (): Promise<QuestionCall[]> => {
 		try {
@@ -209,6 +235,19 @@ export const SurveyContextProvider: React.FC<{ children: ReactNode }> = ({
 	};
 
 	/**
+	 * Parent function that runs the questions call, compiles the survey and sets the survey state
+	 */
+	const handleQuestions = async (): Promise<void> => {
+		try {
+			const questions = (await getQuestions()) as QuestionCall[];
+			const compiledSurvey = compileQuestions(questions);
+			setSurvey(compiledSurvey);
+		} catch (error) {
+			throw error;
+		}
+	};
+
+	/**
 	 * Separates a list of warehouses into unique branch IDs and groups warehouses by their branches.
 	 *
 	 * @param {Warehouse[]} warehouses - The list of all available warehouses pulled from the server.
@@ -219,7 +258,9 @@ export const SurveyContextProvider: React.FC<{ children: ReactNode }> = ({
 	 * - `branches`: An array of unique branch IDs.
 	 * - `groupedWarehouses`: An object where each key is a branch ID and the value is an array of warehouses belonging to that branch.
 	 */
-	const separateBranchesAndGroup = (warehouses: Warehouse[]) => {
+	const separateBranchesAndGroup = (
+		warehouses: Warehouse[]
+	) => {
 		// Separate branch id of each warehouse pulled
 		const branches = [
 			...new Set(
@@ -242,44 +283,23 @@ export const SurveyContextProvider: React.FC<{ children: ReactNode }> = ({
 	};
 
 	/**
-	 * Initializes the warehouse data by:
-	 * 1. Fetching the warehouse data from the get warehouses endpoint
-	 * 2. Creates an array of branches
-	 * 3. Creates an array of arrays of the warehouses with the warehouse id as the array index
-	 * 4. Sets the context branch and warehouse list state variables
-	 *
-	 * @returns void
-	 */
-	const getAndSetWarehouseData = async () => {
-		try {
-			// Fetch warehouses from server as Warehouse[]
-			const warehouses = await getWarehouseList();
-
-			// Compile raw warehouse data into branches and grouped warehouses
-			const compileData = separateBranchesAndGroup(warehouses);
-
-			// Set branch and warehouse list state
-			setBranches(compileData.branches);
-			setWarehouseList(compileData.groupedWarehouses);
-		} catch (error) {
-			throw error;
-		}
-	};
-
-	/**
 	 * Takes in the `Get_SurveyQuestions` call data and compiles the question data into a form that the survey screen logic can use
-	 * 
+	 *
 	 * Compiles questions into a usable survey
-	 * 
+	 *
 	 * @param rawQuestionData Takes in the question data from the server
 	 * @returns A survey of questions, compatible with the survey screen that renders the questions
 	 */
-	const compileQuestions = (rawQuestionData: QuestionCall[]): QuestionInterface[] => {
-		const survey = rawQuestionData.map((question): QuestionInterface => ({
-			text: `${question.QuestionDesc}?`,
-			type: 'rating',
-			key: question.QuestionKey
-		}));
+	const compileQuestions = (
+		rawQuestionData: QuestionCall[]
+	): QuestionInterface[] => {
+		const survey = rawQuestionData.map(
+			(question): QuestionInterface => ({
+				text: `${question.QuestionDesc}?`,
+				type: 'rating',
+				key: question.QuestionKey,
+			})
+		);
 
 		// TODO figure out what to do with the key properties in the questions below
 
@@ -288,39 +308,26 @@ export const SurveyContextProvider: React.FC<{ children: ReactNode }> = ({
 			text: 'What is your first and last name?',
 			type: 'text',
 			key: 0,
-			placeholder: 'Your complete name'
+			placeholder: 'Your complete name',
 		};
 
 		const departmentQuestion: QuestionInterface = {
 			text: 'What department / position do you belong do?',
 			type: 'radio list',
 			key: 0,
-			answers: departments.map((department) => department.DeptDesc)
-		}
+			answers: departments.map((department) => department.DeptDesc),
+		};
 
 		// Add comments question to the bottom
 		const commentQuestion: QuestionInterface = {
 			text: 'Do you have any additional comments?',
 			type: 'text',
 			key: 0,
-			placeholder: 'Comments'
-		}
+			placeholder: 'Comments',
+		};
 
 		// Returning a complete survey
 		return [nameQuestion, departmentQuestion, ...survey, commentQuestion];
-	}
-
-	/**
-	 * Parent function that runs the questions call, compiles the survey and sets the survey state
-	 */
-	const getAndSetQuestions = async (): Promise<void> => {
-		try {
-			const questions = (await getQuestions()) as QuestionCall[];
-			const compiledSurvey = compileQuestions(questions);
-			setSurvey(compiledSurvey);
-		} catch (error) {
-			throw error;
-		}
 	};
 
 	return (
@@ -332,7 +339,7 @@ export const SurveyContextProvider: React.FC<{ children: ReactNode }> = ({
 				setSelectedWarehouses,
 				selectedBranch,
 				setSelectedBranch,
-				survey
+				survey,
 			}}>
 			{children}
 		</SurveyContext.Provider>
