@@ -14,7 +14,6 @@ const useGlobalStyles = () => {
 			alignItems: 'center',
 			backgroundColor: theme.background,
 			padding: 8,
-			marginVertical: 10,
 		},
 		loginContainer: {
 			flex: 1,
@@ -31,7 +30,7 @@ const useGlobalStyles = () => {
 			justifyContent: 'center',
 			alignItems: 'center',
 			backgroundColor: theme.background,
-			padding: 8
+			padding: 8,
 		},
 		/* -- CONTENT -- */
 		error: {
@@ -41,7 +40,7 @@ const useGlobalStyles = () => {
 			fontFamily: 'Nunito',
 			fontSize: 20,
 			padding: 15,
-			borderRadius: 8
+			borderRadius: 8,
 		},
 		image: {
 			width: 130,
@@ -61,6 +60,11 @@ const useGlobalStyles = () => {
 			color: theme.text,
 			textAlign: 'center',
 			marginVertical: 10,
+		},
+		drawerHeaderTitle: {
+			fontFamily: 'Nunito',
+			fontSize: 20,
+			color: theme.text,
 		},
 		banner: {
 			fontFamily: 'Nunito',

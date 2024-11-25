@@ -50,7 +50,7 @@ const RootStack = () => {
 				router.replace('/');
 			} else if (authState.authenticated === true) {
 				console.log('Redirecting to protected section...');
-				router.replace('/(protected)/representative');
+				router.replace('/(protected)/(home)/');
 			}
 		})();
 	}, [fontsLoaded, authState, appReady]);
