@@ -1,21 +1,10 @@
 import React, { useContext, createContext, useState, ReactNode, useEffect, useReducer } from 'react';
 import { endpoints } from '../utils/network/endpoints';
-import { deleteAuthenticationData, storeAuthenticationData } from '../utils/storage/secureStore';
+import { deleteAuthenticationData, getAuthenticationData, storeAuthenticationData } from '../utils/storage/secureStore';
+import { AuthState, failedState } from '../types/authTypes';
+import { store } from 'expo-router/build/global-state/router-store';
 
-/**
- * Represents the authentication state
- * 
- * On login successful, this data is stored in the devices memory
- * 
- * On logout, this data is deleted from devices memory
- */
-export interface AuthState {
-    authenticated: boolean | null;
-    username: string | null;
-    branchKey: number | null;
-    expiration: string | Date | null;
-    token: string | null;
-}
+
 
 /**
  * Represents the different actions the context can take
@@ -62,9 +51,16 @@ export interface LoginAttempt {
  * 
  * This is the state BEFORE the device checks memory for stored tokens
  * This is the state BEFORE the user logs in and replaces the authentication state with their own data
+ * 
+ * IMPORTANT - authenticated MUST BE NULL in this initial state
+ * This is because the splash screen will not hide until the authentication status is either false or true
+ * 
+ * If the authenticated property is initialized to false, the splash screen will hide while the app is still not ready, resulting in this error
+ * 
+ *  (NOBRIDGE) ERROR  Warning: Error: Attempted to navigate before mounting the Root Layout component. Ensure the Root Layout component is rendering a Slot, or other navigator on the first render.
  */
 export const initialState: AuthState = {
-    authenticated: false,
+    authenticated: null,
     username: null,
     branchKey: null,
     expiration: null,
@@ -89,7 +85,7 @@ const authReducer = (state: AuthState, action: AuthAction): AuthState => {
             };
         case 'LOGOUT': 
         case 'LOGIN_FAILURE':
-            return initialState;
+            return failedState;
         case 'LOAD_DATA':
             return { ...state, ...action.payload }
         default: 
@@ -97,7 +93,12 @@ const authReducer = (state: AuthState, action: AuthAction): AuthState => {
     }
 }
 
-const AuthContext = createContext<Partial<AuthProps>>({});
+const AuthContext = createContext<AuthProps>({
+	authState: initialState, // Default value for the context
+	login: async () => ({ success: false }),
+	logout: async () => {},
+});
+
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [authState, dispatch] = useReducer(authReducer, initialState);
@@ -110,11 +111,28 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     useEffect(() => {
         (async () =>{
             try {
-                
-            } catch (error) {
+                const storedCredentials = await getAuthenticationData();
 
+                // TODO check if token is verified
+
+                if (storedCredentials.authenticated) {
+                    dispatch({
+                        type: 'LOGIN_SUCCESS',
+                        payload: storedCredentials
+                    });
+                    return;
+                }
+
+                dispatch({
+                    type: 'LOGIN_FAILURE'
+                });
+            } catch (error) {
+                dispatch({
+                    type: 'LOGIN_FAILURE'
+                });
+                throw error;
             }
-        })
+        })();
     }, []);
 
     /**

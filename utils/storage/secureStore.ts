@@ -1,5 +1,5 @@
 import * as SecureStore from 'expo-secure-store';
-import { AuthState, initialState } from '../../context/AuthContext';
+import { AuthState, failedState } from '../../types/authTypes';
 
 /**
  * The storage key that the authentication state is stored under
@@ -31,7 +31,7 @@ export const getAuthenticationData = async (): Promise<AuthState> => {
         const value = await SecureStore.getItemAsync(STORAGE_KEY);
         if (value === null) {
             console.log('Authentication data failed to be read');
-            return initialState;
+            return failedState;
         }
         console.log('Authentication data successfully read');
         return (JSON.parse(value)) as AuthState;

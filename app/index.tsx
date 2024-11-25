@@ -1,5 +1,5 @@
 import { View, Text, Image, TextInput } from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import useGlobalStyles from '../styles/globalStyles';
 import { theme } from '../styles/theme';
 import Button from '../components/generic/Button';
@@ -9,17 +9,24 @@ import { useAuth } from '../context/AuthContext';
 
 export default function LoginScreen() {
     const globalStyles = useGlobalStyles();
-    const router = useRouter();
-    const { login } = useAuth();
+    const { authState, login } = useAuth();
 
     const [username, setUsername] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [errorMessage, setErrorMessage] = useState<string>('');
+    const [loading, setLoading] = useState<boolean>(false);
+
+    useEffect(() => {
+        console.log('auth check from login', authState.authenticated);
+    }, []);
 
     const handleLogin = async () => {
+        setLoading(true);
         const loginAttempt = await login!(username, password);
-        if (!loginAttempt.success) {
-            setErrorMessage(loginAttempt.message!);
+        setLoading(false);
+        if (!loginAttempt.success && loginAttempt.message) {
+            setErrorMessage(loginAttempt.message);
+            return;
         }
 
         setErrorMessage('');
@@ -58,10 +65,14 @@ export default function LoginScreen() {
                         {errorMessage}
                     </Text>
                 )}
+                <Text style={globalStyles.subtitle}>
+                    Authenticated: {String(authState?.authenticated)}
+                </Text>
                 <Button
-                    title='Login'
+                    title={loading ? 'Logging in...' : 'Login'}
                     onPress={handleLogin}
                     buttonStyle={globalStyles.button}
+                    disabled={loading}
                 />
             </View>
         </>
