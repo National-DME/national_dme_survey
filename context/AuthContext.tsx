@@ -1,5 +1,6 @@
 import React, { useContext, createContext, useState, ReactNode, useEffect, useReducer } from 'react';
 import { endpoints } from '../utils/network/endpoints';
+import { deleteAuthenticationData, storeAuthenticationData } from '../utils/storage/secureStore';
 
 /**
  * Represents the authentication state
@@ -35,7 +36,7 @@ export type AuthAction =
  */
 export interface AuthProps {
     authState: AuthState;
-    login: (username: string, password: string) => Promise<boolean>;
+    login: (username: string, password: string) => Promise<LoginAttempt>;
     logout: () => void;
 }
 
@@ -51,13 +52,18 @@ export interface LoginCall {
 	LoginStatus: boolean;
 }
 
+export interface LoginAttempt {
+    success: boolean;
+    message?: string;
+}
+
 /**
  * Represents the initial state of authentication state 
  * 
  * This is the state BEFORE the device checks memory for stored tokens
  * This is the state BEFORE the user logs in and replaces the authentication state with their own data
  */
-const initialState: AuthState = {
+export const initialState: AuthState = {
     authenticated: false,
     username: null,
     branchKey: null,
@@ -117,7 +123,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
      * @param password Password that the user entered
      * @returns {Promise<boolean>} Boolean based on whether server authentication call was successfull 
      */
-    const login = async (username: string, password: string): Promise<boolean> => {
+    const login = async (username: string, password: string): Promise<LoginAttempt> => {
         try {
             const data = new FormData();
             data.append('endpointname', endpoints.login);
@@ -136,18 +142,46 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
             if (loginAttempt.LoginStatus === true) {
 
-                // TODO dispatch login success to context
+                const compiledAuthState = {
+                    authenticated: true,
+                    username,
+                    branchKey: loginAttempt.BranchKey,
+                    token: loginAttempt.UserToken,
+                    expiration: loginAttempt.ExpiryDate,
+                };
 
-                // TODO build and store auth state
+                dispatch({
+                    type: 'LOGIN_SUCCESS',
+                    payload: compiledAuthState
+                });
 
-                return true;
+                await storeAuthenticationData(compiledAuthState);
+
+                return {
+                    success: true
+                };
+            } else {
+                dispatch({
+                    type: 'LOGIN_FAILURE',
+                });
+    
+                if (loginAttempt.ResponseCode !== 200) {
+                    return {
+                        success: false,
+                        message: 'Server responded with code other than 200'
+                    }
+                };
+    
+                return {
+                    success: false,
+                    message: 'Username or password incorrect'
+                }
             }
-
-            // TODO dispatch login failure
-            return false;
         } catch (error) {
-            // TODO dispatch login failure
             console.log(error);
+            dispatch({
+                type: 'LOGIN_FAILURE'
+            });
             throw error;
         }
     };
@@ -156,9 +190,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
      * Logout function that when called sets the authentication state to its initial state, thus logging out the user and deletes users stored authentication state from device memory
      */
     const logout = async () => {
-        // TODO delete auth state from device memory
-
-        // TODO dispatch logout to context
+        await deleteAuthenticationData();
+        dispatch({
+            type: 'LOGOUT'
+        });
     }
 
     return (

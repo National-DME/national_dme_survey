@@ -5,11 +5,14 @@ import { theme } from "../styles/theme";
 import * as SystemUI from 'expo-system-ui';
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SurveyContextProvider } from "../context/SurveyContext";
+import { AuthProvider } from "../context/AuthContext";
 
 /**
  * 
  * @returns The root layout of the application
  */
+
+// TODO refactor this logic to hold RootStack component so that I can access the authentication context in the same logic that it is wrapping
 
 // Prevents the splash screen from hiding until the application assets are loaded
 SplashScreen.preventAutoHideAsync();
@@ -19,6 +22,8 @@ const Root = () => {
     const [fontsLoaded] = useFonts({
         'Nunito': require('../assets/fonts/Nunito-Regular.ttf')
     });
+
+    // TODO useEffect here that logs in or out based on auth context
 
     // State to track whether the application is ready for user interaction
     const [appReady, setAppReady] = useState(false);
@@ -44,13 +49,15 @@ const Root = () => {
     }
 
     return (
-        <SurveyContextProvider>
-            <GestureHandlerRootView style={{
-                flex: 1, backgroundColor: theme.background
-            }}>
-                <Slot />
-            </GestureHandlerRootView>
-        </SurveyContextProvider>
+        <AuthProvider>
+            <SurveyContextProvider>
+                <GestureHandlerRootView style={{
+                    flex: 1, backgroundColor: theme.background
+                }}>
+                    <Slot />
+                </GestureHandlerRootView>
+            </SurveyContextProvider>
+        </AuthProvider>
     ); 
 }
 

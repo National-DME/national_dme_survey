@@ -5,30 +5,25 @@ import { theme } from '../styles/theme';
 import Button from '../components/generic/Button';
 import { useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { endpoints } from '../utils/network/endpoints';
+import { useAuth } from '../context/AuthContext';
 
 export default function LoginScreen() {
     const globalStyles = useGlobalStyles();
     const router = useRouter();
+    const { login } = useAuth();
 
     const [username, setUsername] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [errorMessage, setErrorMessage] = useState<string>('');
 
-    /* const handleLogin = async () => {
-        //const loginAttempt = await login();
-        if (loginAttempt.ResponseCode !== 200) {
-            setErrorMessage('Network error, check internet connection');
-            return;
+    const handleLogin = async () => {
+        const loginAttempt = await login!(username, password);
+        if (!loginAttempt.success) {
+            setErrorMessage(loginAttempt.message!);
         }
 
-        if (loginAttempt.LoginStatus === true) {
-            setErrorMessage('');
-            router.replace('/representative');
-        } else {
-            setErrorMessage('Username or password incorrect');
-        }
-    } */
+        setErrorMessage('');
+    }
 
 	return (
         <>
@@ -63,11 +58,11 @@ export default function LoginScreen() {
                         {errorMessage}
                     </Text>
                 )}
-                {/* <Button
+                <Button
                     title='Login'
                     onPress={handleLogin}
                     buttonStyle={globalStyles.button}
-                /> */}
+                />
             </View>
         </>
 	);
