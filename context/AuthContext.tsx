@@ -32,7 +32,7 @@ export interface AuthProps {
 /**
  * Represents the data the application receives upon login request from the server
  */
-export interface LoginCall {
+export interface LoginResponse {
 	ResponseCode: number;
 	ResponseMessage: string;
 	UserToken: string;
@@ -44,6 +44,11 @@ export interface LoginCall {
 export interface LoginAttempt {
     success: boolean;
     message?: string;
+}
+
+export interface VerifyTokenResponse {
+    ResponseCode: number;
+    ResponseMessage: string;
 }
 
 /**
@@ -113,27 +118,47 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             try {
                 const storedCredentials = await getAuthenticationData();
 
-                // TODO check if token is verified
-
-                if (storedCredentials.authenticated) {
-                    dispatch({
-                        type: 'LOGIN_SUCCESS',
-                        payload: storedCredentials
-                    });
-                    return;
+                // If user is logged in and token is present
+                if (storedCredentials.authenticated && storedCredentials.token) {
+                    //verify token
+                    if (await verifyToken(storedCredentials.token)) {
+                        dispatch({
+                            type: 'LOGIN_SUCCESS',
+                            payload: storedCredentials,
+                        });
+                        return;
+                    }
                 }
 
-                dispatch({
-                    type: 'LOGIN_FAILURE'
-                });
+                dispatch({ type: 'LOGIN_FAILURE' })
             } catch (error) {
-                dispatch({
-                    type: 'LOGIN_FAILURE'
-                });
+                dispatch({ type: 'LOGIN_FAILURE' });
                 throw error;
             }
         })();
     }, []);
+
+    const verifyToken = async (token: string): Promise<boolean> => {
+        try {
+            const data = new FormData();
+            data.append('endpointname', endpoints.verifyToken);
+            data.append('UserToken', token);
+
+            const response = await fetch(endpoints.BASE_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+                body: data,
+            });
+
+            const result = (await response.json()) as VerifyTokenResponse;
+            return result.ResponseMessage === 'Valid';
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    }
 
     /**
      * 
@@ -156,7 +181,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
                 body: data,
             });
 
-            const loginAttempt = (await response.json()) as LoginCall;
+            const loginAttempt = (await response.json()) as LoginResponse;
 
             if (loginAttempt.LoginStatus === true) {
 

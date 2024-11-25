@@ -3,5 +3,6 @@ export const endpoints = {
 	login: 'SurveyRequestToken',
 	getQuestions: 'Get_SurveyQuestions',
     getWarehouses: 'Get_Warehouses',
-    getDepartments: 'Get_SurveyDepartments'
+    getDepartments: 'Get_SurveyDepartments',
+	verifyToken: 'SurveyVerifyToken'
 };
