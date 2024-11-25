@@ -3,10 +3,10 @@ import {
 	useContext,
 	ReactNode,
 	useState,
-	useEffect,
 } from 'react';
 import { endpoints } from '../utils/network/endpoints';
 import { QuestionInterface, RatingQuestion } from '../components/Question';
+import { getAuthenticationData } from '../utils/storage/secureStore';
 
 /**
  * Exposed functions/state variables of the context
@@ -24,6 +24,8 @@ export interface SurveyContextInterface {
 	handleAnswer: (answer: SurveyAnswerInterface) => void;
 	answers: SurveyAnswerInterface[];
 	currentAnswer: (key: QuestionInterface['key']) => SurveyAnswerInterface['answer'] | undefined;
+	handleWarehouses: (token: string) => Promise<void>;
+	handleQuestions: (token: string) => Promise<void>;
 }
 
 /**
@@ -111,30 +113,6 @@ export const SurveyContextProvider: React.FC<{ children: ReactNode }> = ({
 
 	const [answers, setAnswers] = useState<SurveyAnswerInterface[]>([]);
 
-	/**
-	 * Effect that runs context mount
-	 *
-	 * Calls server; Compiles data; Initializes and sets state variables;
-	 * All via the getAndSetWarehouseData function
-	 */
-	useEffect(() => {
-		(async () => {
-			// Initialize context state
-			console.log('Initializing');
-			await handleWarehouses();
-			await handleQuestions();
-		})();
-	}, []);
-
-	useEffect(() => {
-		console.log(answers);
-	}, [answers]);
-
-	useEffect(() => {
-		if (!survey) return;
-		console.log(survey);
-	}, [survey]);
-
 	const handleAnswer = (answer: SurveyAnswerInterface): void => {
 		setAnswers((prevAnswers) => {
 			const existingAnswerIndex = prevAnswers.findIndex(
@@ -201,7 +179,7 @@ export const SurveyContextProvider: React.FC<{ children: ReactNode }> = ({
 	 *
 	 * @returns void
 	 */
-	const handleWarehouses = async () => {
+	const handleWarehouses = async (): Promise<void> => {
 		console.log('Compiling and setting list of warehouses');
 		try {
 			// Fetch warehouses from server as Warehouse[]
@@ -232,9 +210,10 @@ export const SurveyContextProvider: React.FC<{ children: ReactNode }> = ({
 	const getDepartments = async (): Promise<Department[]> => {
 		console.log('Getting departments from server');
 		try {
+			const userData = await getAuthenticationData();
 			const data = new FormData();
 			data.append('endpointname', endpoints.getDepartments);
-			data.append('usertoken', 'key here');
+			data.append('usertoken', userData.token!);
 
 			const response = await fetch(endpoints.BASE_URL, {
 				method: 'POST',
@@ -267,12 +246,12 @@ export const SurveyContextProvider: React.FC<{ children: ReactNode }> = ({
 	 * This function sends a POST request to the `BASE_URL` with the 'endpointname' field set to `Get_SurveyQuestions`
 	 * @returns {Promise<QuestionCall[]>} An array of questions from the API call
 	 */
-	const getQuestions = async (): Promise<QuestionCall[]> => {
+	const getQuestions = async (token: string): Promise<QuestionCall[]> => {
 		console.log('Getting questions from server');
 		try {
 			const data = new FormData();
 			data.append('endpointname', endpoints.getQuestions);
-			data.append('usertoken', 'key here');
+			data.append('usertoken', token);
 
 			const response = await fetch(endpoints.BASE_URL, {
 				method: 'POST',
@@ -292,10 +271,10 @@ export const SurveyContextProvider: React.FC<{ children: ReactNode }> = ({
 	/**
 	 * Parent function that runs the questions call, compiles the survey and sets the survey state
 	 */
-	const handleQuestions = async (): Promise<void> => {
+	const handleQuestions = async (token: string): Promise<void> => {
 		console.log('Compiling final survey');
 		try {
-			const questions = (await getQuestions()) as QuestionCall[];
+			const questions = (await getQuestions(token)) as QuestionCall[];
 			const departments = await handleDepartments();
 			const compiledSurvey = compileQuestions(questions, departments);
 			setSurvey(compiledSurvey);
@@ -401,7 +380,9 @@ export const SurveyContextProvider: React.FC<{ children: ReactNode }> = ({
 				survey,
 				handleAnswer,
 				answers,
-				currentAnswer
+				currentAnswer,
+				handleWarehouses,
+				handleQuestions
 			}}>
 			{children}
 		</SurveyContext.Provider>

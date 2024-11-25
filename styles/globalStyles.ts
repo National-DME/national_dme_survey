@@ -144,6 +144,7 @@ const useGlobalStyles = () => {
 		},
 		/* -- DROPDOWN -- */
 		dropdown: {
+			alignSelf: 'stretch',
 			height: 50,
 			borderColor: theme.border,
 			borderWidth: 0.5,

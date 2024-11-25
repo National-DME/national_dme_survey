@@ -10,6 +10,7 @@ import { Dropdown, MultiSelect } from 'react-native-element-dropdown';
 import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useSurvey } from '../../context/SurveyContext';
 import { ScrollView } from 'react-native-gesture-handler';
+import { getAuthenticationData } from '../../utils/storage/secureStore';
 
 /**
  * This is the screen used by the representative to input their data first and to initialize the survey
@@ -26,7 +27,29 @@ export default function RepresentativeScreen() {
 		setSelectedWarehouses,
 		selectedBranch,
 		setSelectedBranch,
+		handleWarehouses,
+		handleQuestions
 	} = useSurvey();
+
+	// TODO update this workflow so that if call is unsuccessful, it renders a full screen error message
+
+	/**
+	 * Effect that runs context mount
+	 *
+	 * Calls server; Compiles data; Initializes and sets state variables;
+	 * All via the getAndSetWarehouseData function
+	 */
+	useEffect(() => {
+		(async () => {
+			// Initialize context state
+			const userData = await getAuthenticationData();
+			if (!userData.token) return;
+
+			console.log('Initializing survey');
+			await handleWarehouses(userData.token);
+			await handleQuestions(userData.token);
+		})();
+	}, []);
 
 	/**
 	 * Starts the survey by pushing the user to the survey screen
