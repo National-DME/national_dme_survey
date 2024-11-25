@@ -26,6 +26,13 @@ const useGlobalStyles = () => {
 		iconContainer: {
 			paddingHorizontal: 8,
 		},
+		errorContainer: {
+			flex: 1,
+			justifyContent: 'center',
+			alignItems: 'center',
+			backgroundColor: theme.background,
+			padding: 8
+		},
 		/* -- CONTENT -- */
 		error: {
 			backgroundColor: theme.constant.error,
