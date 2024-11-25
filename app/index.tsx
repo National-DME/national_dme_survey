@@ -7,15 +7,6 @@ import { useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { endpoints } from '../utils/network/endpoints';
 
-interface LoginCall {
-    ResponseCode: number;
-    ResponseMessage: string;
-    UserToken: string;
-    ExpiryDate: string | Date;
-    BranchKey: number;
-    LoginStatus: boolean;
-}
-
 export default function LoginScreen() {
     const globalStyles = useGlobalStyles();
     const router = useRouter();
@@ -24,8 +15,8 @@ export default function LoginScreen() {
     const [password, setPassword] = useState<string>('');
     const [errorMessage, setErrorMessage] = useState<string>('');
 
-    const handleLogin = async () => {
-        const loginAttempt = await login();
+    /* const handleLogin = async () => {
+        //const loginAttempt = await login();
         if (loginAttempt.ResponseCode !== 200) {
             setErrorMessage('Network error, check internet connection');
             return;
@@ -37,29 +28,7 @@ export default function LoginScreen() {
         } else {
             setErrorMessage('Username or password incorrect');
         }
-    }
-
-    const login = async (): Promise<LoginCall> => {
-        try {
-            const data = new FormData();
-            data.append('endpointname', endpoints.login);
-            data.append('UserName', username);
-            data.append('Password', password);
-
-            const response = await fetch(endpoints.BASE_URL, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-                body: data
-            });
-
-            return (await response.json()) as LoginCall;
-        } catch (error) {
-            console.log(error);
-            throw error;
-        }
-    }
+    } */
 
 	return (
         <>
@@ -87,17 +56,18 @@ export default function LoginScreen() {
                     onChangeText={setPassword}
                     keyboardType='default'
                     cursorColor={theme.text}
+                    secureTextEntry={true}
                 />
                 {errorMessage && (
                     <Text style={globalStyles.error}>
                         {errorMessage}
                     </Text>
                 )}
-                <Button
+                {/* <Button
                     title='Login'
                     onPress={handleLogin}
                     buttonStyle={globalStyles.button}
-                />
+                /> */}
             </View>
         </>
 	);
