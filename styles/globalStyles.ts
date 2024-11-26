@@ -63,8 +63,18 @@ const useGlobalStyles = () => {
 		},
 		drawerHeaderTitle: {
 			fontFamily: 'Nunito',
-			fontSize: 20,
+			fontSize: 24,
 			color: theme.text,
+		},
+		drawerLabelStyle: {
+			color: theme.text,
+			fontFamily: 'Nunito',
+			fontSize: 20,
+		},
+		drawerVersionText: {
+			color: theme.text,
+			fontSize: 20,
+			fontFamily: 'Nunito'
 		},
 		banner: {
 			fontFamily: 'Nunito',

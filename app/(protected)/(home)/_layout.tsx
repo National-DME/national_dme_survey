@@ -21,10 +21,7 @@ export default function HomeLayout() {
                 <DrawerItemList {...props} />
                 <DrawerItem
                     label='Logout'
-                    style={{
-                        backgroundColor: theme.card,
-                    }}
-                    labelStyle={globalStyles.drawerHeaderTitle}
+                    labelStyle={globalStyles.drawerLabelStyle}
                     onPress={() => logout()}
                     icon={() => (
                         <AntDesign name='logout' color={theme.text} size={24} />
@@ -35,7 +32,7 @@ export default function HomeLayout() {
                         padding: 16,
                         backgroundColor: theme.background,
                     }}>
-                    <Text style={globalStyles.subtitle}>v1.0.0</Text>
+                    <Text style={globalStyles.drawerVersionText}>v1.0.0</Text>
                 </View>
             </DrawerContentScrollView>
         );
@@ -54,19 +51,14 @@ export default function HomeLayout() {
                 drawerActiveTintColor: theme.text,
                 drawerInactiveBackgroundColor: theme.card,
                 drawerInactiveTintColor: theme.text,
-                drawerLabelStyle: {
-                    fontFamily: 'Nunito',
-                    fontSize: 20,
+                drawerLabelStyle: globalStyles.drawerLabelStyle,
+                drawerItemStyle: {
+                    borderRadius: 8,
+                    marginVertical: 8,
                 },
                 drawerStyle: { 
                     backgroundColor: theme.background,
                 },
-                drawerContentContainerStyle: {
-                    marginVertical: 10
-                },
-                drawerContentStyle: {
-                    padding: 20
-                }
             }}
             drawerContent={(props) => <DrawerButton {...props} />}
         >
@@ -81,7 +73,7 @@ export default function HomeLayout() {
                             name='home'
                             color={theme.text}
                         />
-                    )
+                    ),
                 }}
             />
         </Drawer>
