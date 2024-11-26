@@ -37,6 +37,13 @@ const useGlobalStyles = () => {
 			backgroundColor: theme.background,
 			padding: 8,
 		},
+		successContainer: {
+			flex: 1,
+			justifyContent: 'center',
+			alignItems: 'center',
+			backgroundColor: theme.constant.success,
+			padding: 8
+		},
 		/* -- CONTENT -- */
 		error: {
 			backgroundColor: theme.constant.error,
@@ -129,6 +136,9 @@ const useGlobalStyles = () => {
 		},
 		buttonAccent: {
 			backgroundColor: theme.accent.primary,
+		},
+		buttonSuccess: {
+			backgroundColor: theme.constant.success
 		},
 		/* -- INPUTS -- */
 		textContainer: {

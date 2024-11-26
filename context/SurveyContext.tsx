@@ -29,6 +29,7 @@ export interface SurveyContextInterface {
 	handleQuestions: (token: string) => Promise<void>;
 	surveyFinished: boolean;
 	handleUpload: () => Promise<void>;
+	clearContextData: () => void;
 }
 
 /**
@@ -147,6 +148,19 @@ export const SurveyContextProvider: React.FC<{ children: ReactNode }> = ({
 			setSurveyFinished(false);
 		}
 	}, [answers]);
+
+	/**
+	 * Run when user taps the home button in success.tsx
+	 * 
+	 * This will clear the client data from the context
+	 * This way the representative can use the same application instance to survey multiple clients (not have to restart the application for every survey that the representative carries out)
+	 */
+	const clearContextData = () => {
+		setSelectedBranch('');
+		setSelectedWarehouses([]);
+		setAnswers([]);
+		setSurveyFinished(false);
+	}
 
 	/**
 	 * Handle upload function takes the data from the context state, compiles it and sends it to the server
@@ -503,7 +517,8 @@ export const SurveyContextProvider: React.FC<{ children: ReactNode }> = ({
 				handleWarehouses,
 				handleQuestions,
 				surveyFinished,
-				handleUpload
+				handleUpload,
+				clearContextData
 			}}>
 			{children}
 		</SurveyContext.Provider>

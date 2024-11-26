@@ -66,7 +66,7 @@ export default function RepresentativeScreen() {
 	 * Starts the survey by pushing the user to the survey screen
 	 */
 	const handleStartSurvey = () => {
-		router.push('/survey');
+		router.replace('/survey');
 	};
 
 	return (

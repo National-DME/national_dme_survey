@@ -1,5 +1,5 @@
 import { View, Text } from 'react-native';
-import React from 'react';
+import React, { useState } from 'react';
 import useGlobalStyles from '../../styles/globalStyles';
 import { useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
@@ -18,11 +18,15 @@ export default function SurveyScreen() {
 	const globalStyles = useGlobalStyles();
 	const router = useRouter();
 	const { survey, surveyFinished, handleUpload } = useSurvey();
+	const [loading, setLoading] = useState<boolean>(false);
 
 	const handleSubmit = async () => {
 		try {
+			setLoading(true);
 			console.log('Submitting...');
 			await handleUpload();
+			setLoading(false);
+			router.replace('/success');
 		} catch (error: any) {
 			console.log(error);
 		}
@@ -40,9 +44,10 @@ export default function SurveyScreen() {
 				))}
 				{surveyFinished && (
 					<Button 
-						title='Submit Survey'
+						title={loading ? 'Submitting...' : 'Submit Survey'}
 						onPress={handleSubmit}
-						buttonStyle={globalStyles.buttonAccent}
+						buttonStyle={loading ? globalStyles.buttonSuccess : globalStyles.buttonAccent}
+						disabled={loading}
 					/>
 				)}
 			</ScrollView>

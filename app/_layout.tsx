@@ -1,5 +1,5 @@
 import { useFonts } from "expo-font";
-import { Slot, SplashScreen, useRouter, useSegments } from "expo-router";
+import { Slot, SplashScreen, Stack, useRouter, useSegments } from "expo-router";
 import { useEffect, useState } from "react";
 import { theme } from "../styles/theme";
 import * as SystemUI from 'expo-system-ui';
@@ -88,7 +88,7 @@ const RootStack = () => {
 				flex: 1,
 				backgroundColor: theme.background,
 			}}>
-			<Slot />
+				<Slot />
 		</GestureHandlerRootView>
 	);
 }
