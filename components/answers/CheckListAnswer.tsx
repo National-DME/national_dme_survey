@@ -5,7 +5,7 @@ import useGlobalStyles from '../../styles/globalStyles';
 import { theme } from '../../styles/theme';
 
 export interface CheckListAnswerProps {
-	answers: string[];
+	answers: {title: string, key: number}[];
 }
 
 export default function CheckListAnswer(props: CheckListAnswerProps) {
@@ -33,7 +33,7 @@ export default function CheckListAnswer(props: CheckListAnswerProps) {
 						uncheckedColor={theme.border}
 					/>
 					<Text style={globalStyles.answer}>
-						{answer}
+						{answer.title}
 					</Text>
 				</View>
 			))}

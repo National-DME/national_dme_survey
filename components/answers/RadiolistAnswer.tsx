@@ -7,14 +7,14 @@ import { useSurvey } from '../../context/SurveyContext';
 import { AnswerBase } from '../Answer';
 
 export interface RadioListAnswerProps extends AnswerBase {
-	answers: string[];
+	answers: {title: string, key: number}[];
 }
 
 export default function RadioListAnswer(props: RadioListAnswerProps) {
 	const globalStyles = useGlobalStyles();
 	const { currentAnswer, handleAnswer } = useSurvey();
 
-	const handleSelection = (answer: string) => {
+	const handleSelection = (answer: number) => {
 		handleAnswer({question: props.question, answer});
 	}
 
@@ -23,14 +23,14 @@ export default function RadioListAnswer(props: RadioListAnswerProps) {
 			{props.answers.map((answer, index) => (
 				<View key={index} style={globalStyles.listItem}>
 					<RadioButton 
-						value={answer}
-						status={currentAnswer(props.question.key) === answer ? 'checked' : 'unchecked'}
-						onPress={() => handleSelection(answer)}
+						value={answer.title}
+						status={currentAnswer(props.question.key) === answer.key ? 'checked' : 'unchecked'}
+						onPress={() => handleSelection(answer.key)}
 						color={theme.accent.gradient1.toString()}
 						uncheckedColor={theme.border.toString()}
 					/>
 					<Text style={globalStyles.answer}>
-						{answer}
+						{answer.title}
 					</Text>
 				</View>
 			))}

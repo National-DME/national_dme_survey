@@ -18,7 +18,7 @@ export interface AnswerBase {
  */
 export interface AnswerProps extends AnswerBase {
     type: QuestionInterface['type'];
-    answers?: string[];
+    answers?: {title: string, key: number}[];
     placeholder?: string;
 }
 

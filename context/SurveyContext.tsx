@@ -129,13 +129,39 @@ export const SurveyContextProvider: React.FC<{ children: ReactNode }> = ({
 		// Return true if all required answers are present
 		const allRequiredAnswered = requiredQuestions.every((question) => {
 			const answer = answers.find((answer) => answer.question.key === question.key);
-			console.log(answer);
+			console.log('answer', answer);
 			return answer && answer.answer;
 		});
 
 		// Set exposed state
 		if (allRequiredAnswered) {
 			setSurveyFinished(true);
+
+			console.log('-- HEADER DATA --');
+			console.log('selected branch: ', selectedBranch);
+			console.log('selected warehouses: ', selectedWarehouses);
+			console.log(
+				'client name: ',
+				answers.find(
+					(answer: SurveyAnswerInterface) => answer.question.key === 'NAME'
+				)?.answer
+			);
+			console.log(
+				'department: ',
+				answers.find((answer) => answer.question.key === 'DEPARTMENT')?.answer
+			);
+			console.log(
+				'comment: ',
+				answers.find((answer) => answer.question.key === 'COMMENT')?.answer
+			);
+
+			console.log('-- DETAILS DATA --');
+			
+			answers.forEach((answer, index) => {
+				console.log('question #', index + 1);
+				console.log('question key: ', answer.question.key);
+				console.log('answer: ', answer.answer);
+			});
 		} else {
 			setSurveyFinished(false);
 		}
@@ -383,7 +409,10 @@ export const SurveyContextProvider: React.FC<{ children: ReactNode }> = ({
 			text: 'What department / position do you belong do?',
 			type: 'radio list',
 			key: 'DEPARTMENT',
-			answers: departments.map((department) => department.DeptDesc),
+			answers: departments.map((department) => ({
+				title: department.DeptDesc,
+				key: department.DeptKey
+			})),
 			required: true
 		};
 

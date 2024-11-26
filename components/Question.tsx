@@ -17,12 +17,12 @@ export interface BaseQuestion {
 
 export interface RadioListQuestion extends BaseQuestion {
 	type: 'radio list';
-	answers: string[]; // Required for 'radio list'
+	answers: {title: string, key: number}[]; // Required for 'radio list'
 }
 
 export interface CheckListQuestion extends BaseQuestion {
 	type: 'check list';
-	answers: string[]; // Required for 'check list'
+	answers: {title: string, key: number}[]; // Required for 'check list'
 }
 
 export interface RatingQuestion extends BaseQuestion {
