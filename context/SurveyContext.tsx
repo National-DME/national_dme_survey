@@ -28,6 +28,7 @@ export interface SurveyContextInterface {
 	handleWarehouses: (token: string) => Promise<void>;
 	handleQuestions: (token: string) => Promise<void>;
 	surveyFinished: boolean;
+	handleUpload: () => Promise<void>;
 }
 
 /**
@@ -76,7 +77,14 @@ export interface BranchGroup {
 
 export interface SurveyAnswerInterface {
 	question: QuestionInterface;
-	answer: string | string[] | number | null;
+	answer: string | number[] | number;
+}
+
+export interface HeaderResponse {
+	ResponseCode?: number;
+	ResponseMessage?: string;
+	LoginStatus?: boolean;
+	HeaderKey?: string;
 }
 
 export const SurveyContext = createContext<SurveyContextInterface | null>(null);
@@ -129,43 +137,89 @@ export const SurveyContextProvider: React.FC<{ children: ReactNode }> = ({
 		// Return true if all required answers are present
 		const allRequiredAnswered = requiredQuestions.every((question) => {
 			const answer = answers.find((answer) => answer.question.key === question.key);
-			console.log('answer', answer);
 			return answer && answer.answer;
 		});
 
 		// Set exposed state
-		if (allRequiredAnswered) {
+		if (survey.length > 0 && allRequiredAnswered) {
 			setSurveyFinished(true);
-
-			console.log('-- HEADER DATA --');
-			console.log('selected branch: ', selectedBranch);
-			console.log('selected warehouses: ', selectedWarehouses);
-			console.log(
-				'client name: ',
-				answers.find(
-					(answer: SurveyAnswerInterface) => answer.question.key === 'NAME'
-				)?.answer
-			);
-			console.log(
-				'department: ',
-				answers.find((answer) => answer.question.key === 'DEPARTMENT')?.answer
-			);
-			console.log(
-				'comment: ',
-				answers.find((answer) => answer.question.key === 'COMMENT')?.answer
-			);
-
-			console.log('-- DETAILS DATA --');
-			
-			answers.forEach((answer, index) => {
-				console.log('question #', index + 1);
-				console.log('question key: ', answer.question.key);
-				console.log('answer: ', answer.answer);
-			});
 		} else {
 			setSurveyFinished(false);
 		}
 	}, [answers]);
+
+	/**
+	 * Handle upload function takes the data from the context state, compiles it and sends it to the server
+	 * 
+	 * The point where this is run in the server, the data it is compiling will not be null or undefined
+	 */
+	const handleUpload = async () => {
+		try {
+			// First start the loop of warehouses
+			const clientName = answers.find((answer) => answer.question.key === 'NAME')?.answer!;
+			const departmentKey = answers.find((answer) => answer.question.key === 'DEPARTMENT')?.answer!;
+			const comment = answers.find((answer) => answer.question.key === 'COMMENT')?.answer!;
+			const token = (await getAuthenticationData()).token!;
+			console.log(token);
+	
+			for (const warehouse of selectedWarehouses) {
+				const headerData = new FormData();
+				headerData.append('endpointname', endpoints.createHeader);
+				headerData.append('WhseID', warehouse);
+				headerData.append('ClientName', clientName.toString());
+				headerData.append('DeptKey', departmentKey.toString());
+				headerData.append('Comment', comment.toString());
+				headerData.append('usertoken', token);
+	
+				// Send header data
+				const headerCall = await fetch(endpoints.BASE_URL, {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'multipart/form-data'
+					},
+					body: headerData
+				});
+	
+				const headerResponse = (await headerCall.json()) as HeaderResponse;
+	
+				if (!headerResponse.HeaderKey) {
+					throw new Error('Survey failed to be submitted');
+				}
+	
+				const detailConstants = {
+					endpointName: endpoints.createDetail,
+					headerKey: headerResponse.HeaderKey,
+					token: token
+				};
+	
+				// Separate server called answer objects from front end generated answer objects
+	
+				const serverSentQuestions = answers.filter((answer) => answer.question.fromServer);
+	
+				for (const answer of serverSentQuestions) {
+					const detailData = new FormData();
+					detailData.append('endpointname', detailConstants.endpointName);
+					detailData.append('HdrKey', detailConstants.headerKey);
+					detailData.append('QuestionKey', answer.question.key.toString());
+					detailData.append('Answer', answer.answer.toString());
+					detailData.append('usertoken', token);
+	
+					const detailKey = await fetch(endpoints.BASE_URL, {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'multipart/form-data'
+						},
+						body: detailData
+					});
+
+					console.log('Header key', detailConstants.headerKey);
+					console.log('detail key', await detailKey.json());
+				}
+			}
+		} catch (error: any) {
+			throw error;
+		}
+	}
 
 	const handleAnswer = (answer: SurveyAnswerInterface): void => {
 		setAnswers((prevAnswers) => {
@@ -392,7 +446,8 @@ export const SurveyContextProvider: React.FC<{ children: ReactNode }> = ({
 				text: `${question.QuestionDesc}?`,
 				type: 'rating',
 				key: question.QuestionKey,
-				required: true
+				required: true,
+				fromServer: true
 			})
 		);
 
@@ -402,7 +457,8 @@ export const SurveyContextProvider: React.FC<{ children: ReactNode }> = ({
 			type: 'text',
 			key: 'NAME',
 			placeholder: 'Your complete name',
-			required: true
+			required: true,
+			fromServer: false
 		};
 
 		const departmentQuestion: QuestionInterface = {
@@ -413,7 +469,8 @@ export const SurveyContextProvider: React.FC<{ children: ReactNode }> = ({
 				title: department.DeptDesc,
 				key: department.DeptKey
 			})),
-			required: true
+			required: true,
+			fromServer: false
 		};
 
 		// Add comments question to the bottom
@@ -422,7 +479,8 @@ export const SurveyContextProvider: React.FC<{ children: ReactNode }> = ({
 			type: 'text',
 			key: 'COMMENT',
 			placeholder: 'Comments',
-			required: false
+			required: false,
+			fromServer: false
 		};
 
 		// Returning a complete survey
@@ -444,7 +502,8 @@ export const SurveyContextProvider: React.FC<{ children: ReactNode }> = ({
 				currentAnswer,
 				handleWarehouses,
 				handleQuestions,
-				surveyFinished
+				surveyFinished,
+				handleUpload
 			}}>
 			{children}
 		</SurveyContext.Provider>

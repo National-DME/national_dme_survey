@@ -4,5 +4,7 @@ export const endpoints = {
 	getQuestions: 'Get_SurveyQuestions',
     getWarehouses: 'Get_Warehouses',
     getDepartments: 'Get_SurveyDepartments',
-	verifyToken: 'SurveyVerifyToken'
+	verifyToken: 'SurveyVerifyToken',
+	createHeader: 'POST_SurveyHeader',
+	createDetail: 'POST_SurveyDetail'
 };

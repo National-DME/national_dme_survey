@@ -17,7 +17,16 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 export default function SurveyScreen() {
 	const globalStyles = useGlobalStyles();
 	const router = useRouter();
-	const { survey, surveyFinished } = useSurvey();
+	const { survey, surveyFinished, handleUpload } = useSurvey();
+
+	const handleSubmit = async () => {
+		try {
+			console.log('Submitting...');
+			await handleUpload();
+		} catch (error: any) {
+			console.log(error);
+		}
+	}
 
 	return (
 		<SafeAreaView style={globalStyles.container}>
@@ -32,7 +41,7 @@ export default function SurveyScreen() {
 				{surveyFinished && (
 					<Button 
 						title='Submit Survey'
-						onPress={() => console.log(survey.length)}
+						onPress={handleSubmit}
 						buttonStyle={globalStyles.buttonAccent}
 					/>
 				)}

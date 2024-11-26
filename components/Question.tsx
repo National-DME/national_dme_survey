@@ -13,6 +13,7 @@ export interface BaseQuestion {
 	text: string;
     key: number | 'DEPARTMENT' | 'NAME' | 'COMMENT';
     required: boolean;
+	fromServer: boolean;
 }
 
 export interface RadioListQuestion extends BaseQuestion {
