@@ -23,7 +23,7 @@ export default function TextAnswer(props: TextAnswerProps) {
 	useEffect(() => {
 		// Debounce local answer to not update context too often (for performance reasons)
 		const timeoutId = setTimeout(() => {
-			handleAnswer({questionKey: props.question.key, answer});
+			handleAnswer({question: props.question, answer});
 		}, DEBOUNCE_DELAY);
 
 		return () => clearTimeout(timeoutId);

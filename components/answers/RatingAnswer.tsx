@@ -11,7 +11,7 @@ export default function RatingAnswer(props: AnswerBase) {
     const { currentAnswer, handleAnswer } = useSurvey();
 
     const handleRating = (rating: number) => {
-        handleAnswer({questionKey: props.question.key, answer: rating})
+        handleAnswer({question: props.question, answer: rating})
     }
 
 	return (

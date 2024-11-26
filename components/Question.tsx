@@ -12,6 +12,7 @@ import Answer from './Answer';
 export interface BaseQuestion {
 	text: string;
     key: number | 'DEPARTMENT' | 'NAME' | 'COMMENT';
+    required: boolean;
 }
 
 export interface RadioListQuestion extends BaseQuestion {
@@ -51,22 +52,34 @@ interface QuestionProps {
 export default function Question({ question, index }: QuestionProps) {
     const globalStyles = useGlobalStyles();
 	return (
-        <View style={globalStyles.questionContainer}>
-            <View style={globalStyles.questionBanner}>
-                <Text style={globalStyles.banner}>
-                    Question: {index + 1}
-                </Text>
-            </View>
-            <View style={globalStyles.questionTextContainer}>
-                <Text style={globalStyles.question}>{question.text}</Text>
-                {question.type === 'radio list' || question.type === 'check list' ? (
-                    <Answer question={question} type={question.type} answers={question.answers} />
-                ) : question.type === 'text' ? (
-                    <Answer question={question} type={question.type} placeholder={question.placeholder} />
-                ) : (
-                    <Answer question={question} type={question.type} />
-                )}
-            </View>
-        </View>
+		<View style={globalStyles.questionContainer}>
+			<View style={globalStyles.questionBanner}>
+				<Text style={globalStyles.banner}>
+                    <Text style={globalStyles.errorText}>
+					    {question.required && '*'}
+                    </Text>
+					Question: {index + 1}
+				</Text>
+			</View>
+			<View style={globalStyles.questionTextContainer}>
+				<Text style={globalStyles.question}>{question.text}</Text>
+				{question.type === 'radio list' ||
+				question.type === 'check list' ? (
+					<Answer
+						question={question}
+						type={question.type}
+						answers={question.answers}
+					/>
+				) : question.type === 'text' ? (
+					<Answer
+						question={question}
+						type={question.type}
+						placeholder={question.placeholder}
+					/>
+				) : (
+					<Answer question={question} type={question.type} />
+				)}
+			</View>
+		</View>
 	);
 }

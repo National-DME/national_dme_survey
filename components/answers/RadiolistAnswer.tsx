@@ -15,7 +15,7 @@ export default function RadioListAnswer(props: RadioListAnswerProps) {
 	const { currentAnswer, handleAnswer } = useSurvey();
 
 	const handleSelection = (answer: string) => {
-		handleAnswer({questionKey: props.question.key, answer});
+		handleAnswer({question: props.question, answer});
 	}
 
 	return (

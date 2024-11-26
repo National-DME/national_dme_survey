@@ -13,7 +13,12 @@ const useGlobalStyles = () => {
 			justifyContent: 'flex-start',
 			alignItems: 'center',
 			backgroundColor: theme.background,
-			padding: 8,
+			paddingHorizontal: 8,
+		},
+		questionContainer: {
+			width: '100%',
+			flexDirection: 'column',
+			paddingVertical: 10,
 		},
 		loginContainer: {
 			flex: 1,
@@ -41,6 +46,9 @@ const useGlobalStyles = () => {
 			fontSize: 20,
 			padding: 15,
 			borderRadius: 8,
+		},
+		errorText: {
+			color: theme.constant.error,
 		},
 		image: {
 			width: 130,
@@ -74,7 +82,7 @@ const useGlobalStyles = () => {
 		drawerVersionText: {
 			color: theme.text,
 			fontSize: 20,
-			fontFamily: 'Nunito'
+			fontFamily: 'Nunito',
 		},
 		banner: {
 			fontFamily: 'Nunito',
@@ -221,11 +229,6 @@ const useGlobalStyles = () => {
 			borderRadius: 8,
 		},
 		/* -- QUESTION COMPONENT -- */
-		questionContainer: {
-			width: '100%',
-			flexDirection: 'column',
-			marginVertical: 10,
-		},
 		questionBanner: {
 			backgroundColor: theme.border,
 			borderTopLeftRadius: 10,

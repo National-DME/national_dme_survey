@@ -3,6 +3,7 @@ import {
 	useContext,
 	ReactNode,
 	useState,
+	useEffect,
 } from 'react';
 import { endpoints } from '../utils/network/endpoints';
 import { QuestionInterface, RatingQuestion } from '../components/Question';
@@ -26,6 +27,7 @@ export interface SurveyContextInterface {
 	currentAnswer: (key: QuestionInterface['key']) => SurveyAnswerInterface['answer'] | undefined;
 	handleWarehouses: (token: string) => Promise<void>;
 	handleQuestions: (token: string) => Promise<void>;
+	surveyFinished: boolean;
 }
 
 /**
@@ -73,7 +75,7 @@ export interface BranchGroup {
 }
 
 export interface SurveyAnswerInterface {
-	questionKey: QuestionInterface['key'];
+	question: QuestionInterface;
 	answer: string | string[] | number | null;
 }
 
@@ -113,10 +115,36 @@ export const SurveyContextProvider: React.FC<{ children: ReactNode }> = ({
 
 	const [answers, setAnswers] = useState<SurveyAnswerInterface[]>([]);
 
+	const [surveyFinished, setSurveyFinished] = useState<boolean>(false);
+
+	/**
+	 * useEffect runs every time the answers are updated
+	 * 
+	 * This checks if the survey is complete or not
+	 */
+	useEffect(() => {
+		// Filter the questions and return only the required questions
+		const requiredQuestions = survey.filter((question) => question.required);
+
+		// Return true if all required answers are present
+		const allRequiredAnswered = requiredQuestions.every((question) => {
+			const answer = answers.find((answer) => answer.question.key === question.key);
+			console.log(answer);
+			return answer && answer.answer;
+		});
+
+		// Set exposed state
+		if (allRequiredAnswered) {
+			setSurveyFinished(true);
+		} else {
+			setSurveyFinished(false);
+		}
+	}, [answers]);
+
 	const handleAnswer = (answer: SurveyAnswerInterface): void => {
 		setAnswers((prevAnswers) => {
 			const existingAnswerIndex = prevAnswers.findIndex(
-				(existingAnswer) => existingAnswer.questionKey === answer.questionKey
+				(existingAnswer) => existingAnswer.question.key === answer.question.key
 			);
 
 			if (existingAnswerIndex >= 0) {
@@ -132,7 +160,7 @@ export const SurveyContextProvider: React.FC<{ children: ReactNode }> = ({
 	};
 
 	const currentAnswer = (key: QuestionInterface['key']): SurveyAnswerInterface['answer'] | undefined => {
-		return answers.find((answer) => answer.questionKey === key)?.answer;
+		return answers.find((answer) => answer.question.key === key)?.answer;
 	}
 
 	/**
@@ -338,6 +366,7 @@ export const SurveyContextProvider: React.FC<{ children: ReactNode }> = ({
 				text: `${question.QuestionDesc}?`,
 				type: 'rating',
 				key: question.QuestionKey,
+				required: true
 			})
 		);
 
@@ -347,6 +376,7 @@ export const SurveyContextProvider: React.FC<{ children: ReactNode }> = ({
 			type: 'text',
 			key: 'NAME',
 			placeholder: 'Your complete name',
+			required: true
 		};
 
 		const departmentQuestion: QuestionInterface = {
@@ -354,6 +384,7 @@ export const SurveyContextProvider: React.FC<{ children: ReactNode }> = ({
 			type: 'radio list',
 			key: 'DEPARTMENT',
 			answers: departments.map((department) => department.DeptDesc),
+			required: true
 		};
 
 		// Add comments question to the bottom
@@ -362,6 +393,7 @@ export const SurveyContextProvider: React.FC<{ children: ReactNode }> = ({
 			type: 'text',
 			key: 'COMMENT',
 			placeholder: 'Comments',
+			required: false
 		};
 
 		// Returning a complete survey
@@ -382,7 +414,8 @@ export const SurveyContextProvider: React.FC<{ children: ReactNode }> = ({
 				answers,
 				currentAnswer,
 				handleWarehouses,
-				handleQuestions
+				handleQuestions,
+				surveyFinished
 			}}>
 			{children}
 		</SurveyContext.Provider>

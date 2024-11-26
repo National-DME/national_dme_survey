@@ -7,6 +7,8 @@ import { theme } from '../../styles/theme';
 import Question, { QuestionInterface } from '../../components/Question';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useSurvey } from '../../context/SurveyContext';
+import Button from '../../components/generic/Button';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 /**
  *
@@ -15,21 +17,26 @@ import { useSurvey } from '../../context/SurveyContext';
 export default function SurveyScreen() {
 	const globalStyles = useGlobalStyles();
 	const router = useRouter();
-	const { survey } = useSurvey();
+	const { survey, surveyFinished } = useSurvey();
 
 	return (
-		<>
+		<SafeAreaView style={globalStyles.container}>
 			{/* 
                 Updating status bar color to convey to user that survey has started and to provide contrast
             */}
 			<StatusBar style='light' backgroundColor={theme.accent.gradient1} />
-			<View style={globalStyles.container}>
-				<ScrollView contentContainerStyle={globalStyles.questionContainer}>
-					{survey.map((question: QuestionInterface, index) => (
-						<Question key={index} question={question} index={index} />
-					))}
-				</ScrollView>
-			</View>
-		</>
+			<ScrollView contentContainerStyle={globalStyles.questionContainer}>
+				{survey.map((question: QuestionInterface, index) => (
+					<Question key={index} question={question} index={index} />
+				))}
+				{surveyFinished && (
+					<Button 
+						title='Submit Survey'
+						onPress={() => console.log(survey.length)}
+						buttonStyle={globalStyles.buttonAccent}
+					/>
+				)}
+			</ScrollView>
+		</SafeAreaView>
 	);
 }

@@ -14,6 +14,8 @@ export default function CheckListAnswer(props: CheckListAnswerProps) {
 		props.answers.map(() => false)
 	);
 
+	// TODO test implementation of checklist
+
 	const handleCheckboxChanged = (index: number) => {
 		const updatedCheckedState = [...checkedState];
 		updatedCheckedState[index] = !updatedCheckedState[index];
