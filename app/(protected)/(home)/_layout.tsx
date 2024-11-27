@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Drawer from 'expo-router/drawer';
 import {
 	DrawerContentScrollView,
@@ -10,10 +10,20 @@ import { useAuth } from '../../../context/AuthContext';
 import { AntDesign } from '@expo/vector-icons';
 import useGlobalStyles from '../../../styles/globalStyles';
 import { View, Text } from 'react-native';
+import { getAuthenticationData } from '../../../utils/storage/secureStore';
 
 export default function HomeLayout() {
     const { logout } = useAuth();
     const globalStyles = useGlobalStyles();
+    const [username, setUsername] = useState<string>('Unknown');
+
+    useEffect(() => {
+        (async () => {
+            const username = (await getAuthenticationData()).username;
+            if (!username) return;
+            setUsername(username);
+        })();
+    }, []);
 
     const DrawerButton = (props: any) => {
         return (
@@ -32,6 +42,7 @@ export default function HomeLayout() {
                         padding: 16,
                         backgroundColor: theme.background,
                     }}>
+                    <Text style={globalStyles.drawerVersionText}>{username}</Text>
                     <Text style={globalStyles.drawerVersionText}>v1.0.0</Text>
                 </View>
             </DrawerContentScrollView>

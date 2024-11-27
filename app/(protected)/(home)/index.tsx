@@ -119,7 +119,7 @@ export default function RepresentativeScreen() {
 					/>
 					{selectedBranch && (
 						<MultiSelect
-							mode='default'
+							mode='auto'
 							style={globalStyles.dropdown}
 							placeholderStyle={globalStyles.placeholder}
 							selectedTextStyle={globalStyles.selectedText}

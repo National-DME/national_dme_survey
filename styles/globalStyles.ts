@@ -83,8 +83,10 @@ const useGlobalStyles = () => {
 		},
 		drawerLabelStyle: {
 			color: theme.text,
-			fontFamily: 'Nunito',
+			fontFamily: 'Roboto',
+			includeFontPadding: false,
 			fontSize: 20,
+			textAlignVertical: 'center'
 		},
 		drawerVersionText: {
 			color: theme.text,
