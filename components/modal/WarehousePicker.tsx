@@ -42,7 +42,7 @@ export default function WarehousePicker(props: WarehousePickerProps) {
 		<Modal
             animationType='fade'
             transparent={true}
-            visible={true}>
+            visible={false}>
             <View style={globalStyles.modalContainer}>
                 <View style={[
                     globalStyles.generalModalView,

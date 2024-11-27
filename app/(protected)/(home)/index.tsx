@@ -6,13 +6,11 @@ import { theme } from '../../../styles/theme';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Button from '../../../components/generic/Button';
-import { Dropdown, MultiSelect } from 'react-native-element-dropdown';
 import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useSurvey } from '../../../context/SurveyContext';
 import { ScrollView } from 'react-native-gesture-handler';
 import { getAuthenticationData } from '../../../utils/storage/secureStore';
 import ErrorMessage from '../../../components/error/ErrorMessage';
-import DropDown from '../../../components/generic/DropDown';
 import WarehousePicker from '../../../components/modal/WarehousePicker';
 
 export interface WarehouseSelection {
@@ -51,6 +49,7 @@ export default function RepresentativeScreen() {
 		(async () => {
 			await getDataViaContext();
 			setSelectedBranch('UT1');
+			setSelectedWarehouses(['72024A']);
 		})();
 	}, []);
 
@@ -95,88 +94,6 @@ export default function RepresentativeScreen() {
 						warehouse(s) you’re at. This ensures the client ratings are
 						linked to the right location.
 					</Text>
-					<DropDown />
-					{/* <Dropdown
-						mode='default'
-						style={globalStyles.dropdown}
-						placeholderStyle={globalStyles.placeholder}
-						selectedTextStyle={globalStyles.selectedText}
-						inputSearchStyle={globalStyles.inputSearchStyle}
-						itemTextStyle={globalStyles.itemTextStyle}
-						activeColor={theme.secondary}
-						data={branches.map((branch) => ({
-							label: branch,
-							value: branch,
-						}))}
-						placeholder='Select branch'
-						searchPlaceholder='Search branches...'
-						maxHeight={300}
-						labelField='label'
-						valueField='value'
-						value={selectedBranch}
-						onChange={(item) => {
-							setSelectedBranch(item.value);
-						}}
-						renderLeftIcon={() => (
-							<MaterialCommunityIcons
-								color={theme.secondary}
-								size={20}
-								name='source-branch'
-								style={{ padding: 5 }}
-							/>
-						)}
-					/> */}
-					{selectedBranch && (
-						<MultiSelect
-							mode='auto'
-							style={globalStyles.dropdown}
-							placeholderStyle={globalStyles.placeholder}
-							selectedTextStyle={globalStyles.selectedText}
-							inputSearchStyle={globalStyles.inputSearchStyle}
-							itemTextStyle={globalStyles.itemTextStyle}
-							selectedStyle={globalStyles.selectedStyle}
-							activeColor={theme.secondary}
-							data={warehouseList[selectedBranch].map(
-								(warehouse) => ({
-									label: `${warehouse.WhseDescription}\n${warehouse.WhseID}`,
-									value: warehouse.WhseID,
-								})
-							)}
-							value={selectedWarehouses}
-							placeholder='Select warehouse(s)'
-							searchPlaceholder='Search warehouses'
-							search
-							maxHeight={300}
-							labelField='label'
-							valueField='value'
-							onChange={(item) => {
-								setSelectedWarehouses(item);
-							}}
-							renderLeftIcon={() => (
-								<MaterialCommunityIcons
-									color={theme.secondary}
-									size={20}
-									name='warehouse'
-									style={{ padding: 5 }}
-								/>
-							)}
-							renderSelectedItem={(item, unSelect) => (
-								<Button
-									title={item.value}
-									onPress={() => unSelect && unSelect(item)}
-									buttonStyle={globalStyles.selectedButton}
-									icon={
-										<AntDesign
-											size={22}
-											color={theme.constant.error}
-											name='closecircle'
-										/>
-									}
-									iconPosition='right'
-								/>
-							)}
-						/>
-					)}
 					{selectedBranch && selectedWarehouses.length !== 0 && (
 						<Button
 							title='Start Survey'
