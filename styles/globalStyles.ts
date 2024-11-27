@@ -205,6 +205,7 @@ const useGlobalStyles = () => {
 			alignItems: 'center',
 		},
 		baseModalView: {
+			flex: 1,
 			padding: 15,
 			margin: 20,
 			flexDirection: 'column',
@@ -212,7 +213,7 @@ const useGlobalStyles = () => {
 			alignItems: 'stretch',
 			borderRadius: 8,
 			width: '95%',
-			maxHeight: height * 0.7,
+			maxHeight: height * 0.9,
 			shadowOffset: {
 				width: 2,
 				height: 2,
@@ -221,9 +222,24 @@ const useGlobalStyles = () => {
 		generalModalView: {
 			backgroundColor: theme.background,
 		},
+		/* -- CHIPS -- */
+		chipContainer: {
+			flexDirection: 'row',
+			flexWrap: 'wrap',
+		},
+		chip: {
+			margin: 5,
+			backgroundColor: theme.primary,
+		},
+		chipContent: {
+			fontFamily: 'Nunito',
+			fontSize: 15,
+			color: theme.text
+		},
 		/* -- DROPDOWN -- */
 		dropdownContainer: {
 			width: '100%',
+			minHeight: '80%'
 		},
 		dropdownContent: {
 			fontFamily: 'Nunito',
@@ -239,10 +255,15 @@ const useGlobalStyles = () => {
 			borderColor: theme.border,
 			borderRadius: 8,
 		},
+		dropdownContainerSelected: {
+			backgroundColor: theme.primary,
+			color: theme.text,
+			borderColor: theme.primary
+		},
 		dropdownContentSubtitle: {
 			fontFamily: 'Nunito',
 			fontSize: 18,
-			color: theme.secondary,
+			color: theme.text,
 		},
 		dropdownMessageContent: {
 			fontFamily: 'Nunito',
