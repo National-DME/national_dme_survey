@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { Dimensions, StyleSheet } from 'react-native';
 import { theme } from './theme';
 
 /**
@@ -6,6 +6,8 @@ import { theme } from './theme';
  * @returns Stylesheet that is accessible globally
  */
 const useGlobalStyles = () => {
+	const { height } = Dimensions.get('window');
+
 	return StyleSheet.create({
 		/* -- CONTAINERS -- */
 		container: {
@@ -42,7 +44,7 @@ const useGlobalStyles = () => {
 			justifyContent: 'center',
 			alignItems: 'center',
 			backgroundColor: theme.constant.success,
-			padding: 8
+			padding: 8,
 		},
 		/* -- CONTENT -- */
 		error: {
@@ -76,6 +78,18 @@ const useGlobalStyles = () => {
 			textAlign: 'center',
 			marginVertical: 10,
 		},
+		modalTitle: {
+			fontFamily: 'Nunito',
+			fontSize: 30,
+			textAlign: 'center',
+			color: theme.text,
+		},
+		modalSubtitle: {
+			fontFamily: 'Nunito',
+			fontSize: 25,
+			textAlign: 'center',
+			color: theme.text,
+		},
 		drawerHeaderTitle: {
 			fontFamily: 'Nunito',
 			fontSize: 24,
@@ -86,7 +100,7 @@ const useGlobalStyles = () => {
 			fontFamily: 'Roboto',
 			includeFontPadding: false,
 			fontSize: 20,
-			textAlignVertical: 'center'
+			textAlignVertical: 'center',
 		},
 		drawerVersionText: {
 			color: theme.text,
@@ -140,7 +154,7 @@ const useGlobalStyles = () => {
 			backgroundColor: theme.accent.primary,
 		},
 		buttonSuccess: {
-			backgroundColor: theme.constant.success
+			backgroundColor: theme.constant.success,
 		},
 		/* -- INPUTS -- */
 		textContainer: {
@@ -148,7 +162,7 @@ const useGlobalStyles = () => {
 		},
 		textInput: {
 			backgroundColor: theme.background,
-			width: '90%',
+			width: '100%',
 			textAlignVertical: 'top',
 			margin: 10,
 			padding: 8,
@@ -183,7 +197,59 @@ const useGlobalStyles = () => {
 			flexDirection: 'row',
 			justifyContent: 'flex-start',
 		},
+		/* -- MODAL -- */
+		modalContainer: {
+			flex: 1,
+			backgroundColor: 'rgba(0, 0, 0, 0.7)',
+			justifyContent: 'center',
+			alignItems: 'center',
+		},
+		baseModalView: {
+			padding: 15,
+			margin: 20,
+			flexDirection: 'column',
+			justifyContent: 'center',
+			alignItems: 'stretch',
+			borderRadius: 8,
+			width: '95%',
+			maxHeight: height * 0.7,
+			shadowOffset: {
+				width: 2,
+				height: 2,
+			},
+		},
+		generalModalView: {
+			backgroundColor: theme.background,
+		},
 		/* -- DROPDOWN -- */
+		dropdownContainer: {
+			width: '100%',
+		},
+		dropdownContent: {
+			fontFamily: 'Nunito',
+			fontSize: 18,
+			color: theme.text,
+			textAlign: 'left',
+			width: '100%',
+		},
+		dropdownContentContainer: {
+			padding: 8,
+			marginVertical: 10,
+			borderWidth: 0.5,
+			borderColor: theme.border,
+			borderRadius: 8,
+		},
+		dropdownContentSubtitle: {
+			fontFamily: 'Nunito',
+			fontSize: 18,
+			color: theme.secondary,
+		},
+		dropdownMessageContent: {
+			fontFamily: 'Nunito',
+			fontSize: 20,
+			color: theme.constant.error,
+			textAlign: 'center',
+		},
 		dropdown: {
 			alignSelf: 'stretch',
 			height: 50,

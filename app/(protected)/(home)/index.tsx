@@ -12,6 +12,13 @@ import { useSurvey } from '../../../context/SurveyContext';
 import { ScrollView } from 'react-native-gesture-handler';
 import { getAuthenticationData } from '../../../utils/storage/secureStore';
 import ErrorMessage from '../../../components/error/ErrorMessage';
+import DropDown from '../../../components/generic/DropDown';
+import WarehousePicker from '../../../components/modal/WarehousePicker';
+
+export interface WarehouseSelection {
+	value: string;
+	label: string;
+}
 
 /**
  * This is the screen used by the representative to input their data first and to initialize the survey
@@ -43,6 +50,7 @@ export default function RepresentativeScreen() {
 	useEffect(() => {
 		(async () => {
 			await getDataViaContext();
+			setSelectedBranch('UT1');
 		})();
 	}, []);
 
@@ -87,7 +95,8 @@ export default function RepresentativeScreen() {
 						warehouse(s) you’re at. This ensures the client ratings are
 						linked to the right location.
 					</Text>
-					<Dropdown
+					<DropDown />
+					{/* <Dropdown
 						mode='default'
 						style={globalStyles.dropdown}
 						placeholderStyle={globalStyles.placeholder}
@@ -116,7 +125,7 @@ export default function RepresentativeScreen() {
 								style={{ padding: 5 }}
 							/>
 						)}
-					/>
+					/> */}
 					{selectedBranch && (
 						<MultiSelect
 							mode='auto'
@@ -179,6 +188,15 @@ export default function RepresentativeScreen() {
 						/>
 					)}
 				</ScrollView>
+			)}
+			{selectedBranch && (
+				<WarehousePicker branch='UT1' warehouses={
+					warehouseList[selectedBranch].map(
+						(warehouse) => ({
+							label: warehouse.WhseDescription,
+							value: warehouse.WhseID,
+						})
+					)}/>
 			)}
 		</>
 	);
