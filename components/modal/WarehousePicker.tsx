@@ -7,10 +7,13 @@ import { useSurvey } from '../../context/SurveyContext';
 import { Chip } from 'react-native-paper';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { ScrollView } from 'react-native-gesture-handler';
+import Button from '../generic/Button';
 
 export interface WarehousePickerProps {
     branch: string;
-    warehouses: WarehouseSelection[]
+    visible: boolean;
+    warehouses: WarehouseSelection[];
+    onClose: () => void;
 }
 
 export default function WarehousePicker(props: WarehousePickerProps) {
@@ -42,7 +45,8 @@ export default function WarehousePicker(props: WarehousePickerProps) {
 		<Modal
             animationType='fade'
             transparent={true}
-            visible={true}>
+            onRequestClose={props.onClose}
+            visible={props.visible}>
             <View style={globalStyles.modalContainer}>
                 <View style={[
                     globalStyles.generalModalView,
@@ -107,6 +111,10 @@ export default function WarehousePicker(props: WarehousePickerProps) {
                             </Text>
                         )}
                     </ScrollView>
+                    <Button 
+                        title={`Select ${selectedWarehouses.length} warehouse${selectedWarehouses.length === 1 ? '' : 's'}`}
+                        onPress={props.onClose}
+                    />
                 </View>
             </View>
         </Modal>
