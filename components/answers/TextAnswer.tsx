@@ -29,6 +29,7 @@ export default function TextAnswer(props: TextAnswerProps) {
 		return () => clearTimeout(timeoutId);
 	}, [answer]);
 
+	// BUG the text box expands off screen when the first line of content goes beyond the first line
 	return (
 		<View style={globalStyles.textContainer}>
 			<TextInput 

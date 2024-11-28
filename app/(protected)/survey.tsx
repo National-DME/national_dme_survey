@@ -37,6 +37,7 @@ export default function SurveyScreen() {
 			{/* 
                 Updating status bar color to convey to user that survey has started and to provide contrast
             */}
+			// BUG in text answers
 			<StatusBar style='light' backgroundColor={theme.accent.gradient1} />
 			<ScrollView contentContainerStyle={globalStyles.questionContainer}>
 				{survey.map((question: QuestionInterface, index) => (
