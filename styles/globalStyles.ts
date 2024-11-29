@@ -13,7 +13,6 @@ const useGlobalStyles = () => {
 		container: {
 			flex: 1,
 			justifyContent: 'flex-start',
-			alignItems: 'center',
 			backgroundColor: theme.background,
 			paddingHorizontal: 8,
 		},
