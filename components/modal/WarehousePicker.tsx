@@ -14,11 +14,12 @@ export interface WarehousePickerProps {
     visible: boolean;
     warehouses: WarehouseSelection[];
     onClose: () => void;
+    handleSelectWarehouse: (warehouseId: string) => void;
 }
 
 export default function WarehousePicker(props: WarehousePickerProps) {
     const globalStyles = useGlobalStyles();
-    const { selectedWarehouses, setSelectedWarehouses } = useSurvey();
+    const { selectedWarehouses } = useSurvey();
 
     const [keyword, setKeyword] = useState<string>('');
     const [filteredSelection, setFilteredSelection] = useState<WarehouseSelection[]>(props.warehouses);
@@ -30,16 +31,10 @@ export default function WarehousePicker(props: WarehousePickerProps) {
         } 
     
         const newResultSet = props.warehouses.filter((warehouse) => {
-            return warehouse.label && warehouse.label.toLowerCase().includes(keyword.toLowerCase());
+            return warehouse.label && warehouse.label.trim().toLowerCase().includes(keyword.trim().toLowerCase());
         });
         setFilteredSelection(newResultSet);
     }, [keyword, props.warehouses]);
-
-    const handleSelectWarehouse = (warehouseId: string) => {
-        const newSelection = selectedWarehouses.includes(warehouseId) ? selectedWarehouses.filter((id) => id !== warehouseId) : [...selectedWarehouses, warehouseId];
-
-        setSelectedWarehouses(newSelection);
-    };
 
 	return (
 		<Modal
@@ -71,7 +66,7 @@ export default function WarehousePicker(props: WarehousePickerProps) {
                                             color={theme.text.toString()}  
                                         />
                                     )}
-                                    onPress={() => handleSelectWarehouse(warehouse)}>
+                                    onPress={() => props.handleSelectWarehouse(warehouse)}>
                                     {warehouse}
                                 </Chip>
                             ))}
@@ -81,6 +76,7 @@ export default function WarehousePicker(props: WarehousePickerProps) {
                         alignItems: 'center'
                     }}>
                         <TextInput 
+                            value={keyword}
                             placeholder='Search warehouse(s)'
                             placeholderTextColor={theme.border.toString()}
                             style={globalStyles.textInput}
@@ -96,7 +92,7 @@ export default function WarehousePicker(props: WarehousePickerProps) {
                                     globalStyles.dropdownContentContainer,
                                     selectedWarehouses.includes(warehouse.value) && globalStyles.dropdownContainerSelected
                                 ]}
-                                onPress={() => handleSelectWarehouse(warehouse.value)}>
+                                onPress={() => props.handleSelectWarehouse(warehouse.value)}>
                                     <Text style={globalStyles.dropdownContent}>
                                         {warehouse.label}
                                     </Text>
@@ -114,6 +110,7 @@ export default function WarehousePicker(props: WarehousePickerProps) {
                     <Button 
                         title={`Select ${selectedWarehouses.length} warehouse${selectedWarehouses.length === 1 ? '' : 's'}`}
                         onPress={props.onClose}
+                        buttonStyle={globalStyles.buttonSecondary}
                     />
                 </View>
             </View>

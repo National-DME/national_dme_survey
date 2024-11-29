@@ -228,7 +228,7 @@ const useGlobalStyles = () => {
 		},
 		chip: {
 			margin: 5,
-			backgroundColor: theme.primary,
+			backgroundColor: theme.secondary,
 		},
 		chipContent: {
 			fontFamily: 'Nunito',
@@ -255,9 +255,9 @@ const useGlobalStyles = () => {
 			borderRadius: 8,
 		},
 		dropdownContainerSelected: {
-			backgroundColor: theme.primary,
+			backgroundColor: theme.secondary,
 			color: theme.text,
-			borderColor: theme.primary
+			borderColor: theme.secondary
 		},
 		dropdownContentSubtitle: {
 			fontFamily: 'Nunito',

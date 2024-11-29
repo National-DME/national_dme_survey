@@ -12,6 +12,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { getAuthenticationData } from '../../../utils/storage/secureStore';
 import ErrorMessage from '../../../components/error/ErrorMessage';
 import WarehousePicker from '../../../components/modal/WarehousePicker';
+import { Chip } from 'react-native-paper';
 
 export interface WarehouseSelection {
 	value: string;
@@ -50,6 +51,18 @@ export default function RepresentativeScreen() {
 			await getDataViaContext();
 		})();
 	}, []);
+
+	useEffect(() => {
+		setSelectedWarehouses([]);
+	}, [selectedBranch]);
+
+	const handleSelectWarehouse = (warehouseId: string) => {
+		const newSelection = selectedWarehouses.includes(warehouseId)
+			? selectedWarehouses.filter((id) => id !== warehouseId)
+			: [...selectedWarehouses, warehouseId];
+
+		setSelectedWarehouses(newSelection);
+	};
 
 	const getDataViaContext = async () => {
 		try {
@@ -122,17 +135,40 @@ export default function RepresentativeScreen() {
 							/>
 						)}
 					/>
-					<Button 
-						title='Select warehouse(s)'
-						onPress={() => setRenderWarehousePicker(true)}
-					/>
+					{(selectedBranch && selectedWarehouses.length > 0) && (
+						<View style={globalStyles.chipContainer}>
+							{selectedWarehouses.map((warehouse) => (
+								<Chip
+									key={warehouse}
+									style={globalStyles.chip}
+									textStyle={globalStyles.chipContent}
+									onPress={() => handleSelectWarehouse(warehouse)}
+									icon={() => (
+										<MaterialCommunityIcons 
+											name='close'
+											size={24}
+											color={theme.text}	
+										/>
+									)}>
+									{warehouse}
+								</Chip>
+							))}
+						</View>
+					)}
+					{selectedBranch && (
+						<Button 
+							title='Select warehouse(s)'
+							onPress={() => setRenderWarehousePicker(true)}
+							buttonStyle={globalStyles.buttonSecondary}
+						/>
+					)}
 					{(selectedBranch && selectedWarehouses.length !== 0) && (
 						<Button
 							title='Start Survey'
 							onPress={handleStartSurvey}
 							buttonStyle={[
 								globalStyles.button,
-								globalStyles.buttonSecondary,
+								globalStyles.buttonAccent,
 							]}
 						/>
 					)}
@@ -140,6 +176,7 @@ export default function RepresentativeScreen() {
 			)}
 			{(selectedBranch && warehouseList) && (
 				<WarehousePicker 
+					handleSelectWarehouse={handleSelectWarehouse}
 					branch={selectedBranch} 
 					visible={renderWarehousePicker}
 					onClose={() => setRenderWarehousePicker(false)}
