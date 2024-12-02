@@ -5,7 +5,7 @@ import { QuestionInterface } from './Question';
 import RatingAnswer from './answers/RatingAnswer';
 import TextAnswer from './answers/TextAnswer';
 import CheckListAnswer from './answers/CheckListAnswer';
-import RadioListAnswer from './answers/RadiolistAnswer';
+import RadioListAnswer from './answers/RadioListAnswer';
 
 
 export interface AnswerBase {
