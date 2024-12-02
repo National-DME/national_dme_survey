@@ -20,9 +20,6 @@ const RootStack = () => {
 	const segments = useSegments();
 	const router = useRouter();
 
-	// State to track whether the application is ready for user interaction
-	const [appReady, setAppReady] = useState(false);
-
 	// Load fonts using expo-font package
 	const [fontsLoaded] = useFonts({
 		Nunito: require('../assets/fonts/Nunito-Regular.ttf'),
@@ -44,11 +41,18 @@ const RootStack = () => {
 			if (authState.authenticated === true) {
 				router.replace('/(protected)/(home)');
 			} else {
-				router.replace('/');
+				router.replace('/LoginScreen');
 			}
-			await SplashScreen.hideAsync();
 		})();
 	}, [authState, fontsLoaded]);
+
+	useEffect(() => {
+		(async () => {
+			if (authState?.authenticated !== null && (segments[0] === '/' || segments[0] === '(protected)')) {
+				await SplashScreen.hideAsync();
+			}
+		})();
+	}, [authState, segments]);
 
 	return (
 		<GestureHandlerRootView

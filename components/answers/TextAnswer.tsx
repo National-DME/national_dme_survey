@@ -23,13 +23,13 @@ export default function TextAnswer(props: TextAnswerProps) {
 	useEffect(() => {
 		// Debounce local answer to not update context too often (for performance reasons)
 		const timeoutId = setTimeout(() => {
+			answer.trim();
 			handleAnswer({question: props.question, answer});
 		}, DEBOUNCE_DELAY);
 
 		return () => clearTimeout(timeoutId);
 	}, [answer]);
 
-	// BUG the text box expands off screen when the first line of content goes beyond the first line
 	return (
 		<View style={globalStyles.textContainer}>
 			<TextInput 

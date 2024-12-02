@@ -27,6 +27,7 @@ const useGlobalStyles = () => {
 			justifyContent: 'center',
 			alignItems: 'center',
 			backgroundColor: theme.background,
+			marginHorizontal: 10
 		},
 		iconContainer: {
 			paddingHorizontal: 8,
@@ -96,7 +97,7 @@ const useGlobalStyles = () => {
 		},
 		drawerLabelStyle: {
 			color: theme.text,
-			fontFamily: 'Roboto',
+			fontFamily: 'Nunito',
 			includeFontPadding: false,
 			fontSize: 20,
 			textAlignVertical: 'center',
