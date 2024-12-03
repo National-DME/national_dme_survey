@@ -96,7 +96,10 @@ export default function RepresentativeScreen() {
 					buttonTitle='Generate survey again'
 				/>
 			) : (
-				<ScrollView contentContainerStyle={globalStyles.container}>
+				<ScrollView 
+				contentContainerStyle={globalStyles.container}
+				keyboardShouldPersistTaps='handled'
+				>
 					<StatusBar style='light' backgroundColor={theme.secondary} />
 					<Text style={globalStyles.title}>Where are you?</Text>
 					<View style={globalStyles.line} />

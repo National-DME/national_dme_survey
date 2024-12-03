@@ -21,6 +21,8 @@ export default function LoginScreen() {
 
     const handleLogin = async () => {
         setLoading(true);
+		setErrorMessage('');
+		await new Promise((resolve) => setTimeout(resolve, 1500));
         const loginAttempt = await login!(username.trim(), password.trim());
         setLoading(false);
         if (!loginAttempt.success && loginAttempt.message) {

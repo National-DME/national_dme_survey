@@ -53,7 +53,8 @@ export default function WarehousePicker(props: WarehousePickerProps) {
                         maxHeight: '20%'
                     }}>
                         <ScrollView 
-                            contentContainerStyle={globalStyles.chipContainer}>
+                            contentContainerStyle={globalStyles.chipContainer}
+                            keyboardShouldPersistTaps='handled'>
                             {selectedWarehouses.map((warehouse) => (
                                 <Chip 
                                     key={warehouse}
@@ -83,7 +84,10 @@ export default function WarehousePicker(props: WarehousePickerProps) {
                             onChangeText={setKeyword}
                         />
                     </View>
-                    <ScrollView contentContainerStyle={globalStyles.dropdownContainer}>
+                    <ScrollView 
+                    contentContainerStyle={globalStyles.dropdownContainer}
+                    keyboardShouldPersistTaps='handled'
+                    >
                         {filteredSelection.length > 0 ? (
                             filteredSelection.map((warehouse) => (
                                 <Pressable

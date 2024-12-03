@@ -1,6 +1,7 @@
 import { View, Text, TouchableOpacity, ViewStyle, TextStyle, Pressable } from 'react-native';
 import React, { ReactNode } from 'react';
 import useGlobalStyles from '../../styles/globalStyles';
+import { theme } from '../../styles/theme';
 
 export interface ButtonProps {
     title: string;
@@ -20,7 +21,14 @@ export default function Button(props: ButtonProps) {
     : [globalStyles.button, props.buttonStyle];
     
 	return (
-		<Pressable onPress={props.onPress} style={combinedButtonStyle}>
+		<Pressable 
+            onPress={props.onPress} 
+            style={combinedButtonStyle}
+            android_ripple={{
+                color: theme.text,
+                borderless: false,
+                foreground: true
+            }}>
             {(props.icon && props.iconPosition === 'left') && (
                 <View style={globalStyles.iconContainer}>
                     {props.icon}
