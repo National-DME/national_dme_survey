@@ -39,7 +39,7 @@ const RootStack = () => {
 			}
 	
 			if (authState.authenticated === true) {
-				router.replace('/(protected)/(home)');
+				router.replace('/(protected)/success');
 			} else {
 				router.replace('/LoginScreen');
 			}

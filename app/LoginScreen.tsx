@@ -37,7 +37,7 @@ export default function LoginScreen() {
 			<View style={globalStyles.loginContainer}>
 				<Image
 					source={require('../assets/logo.png')}
-					style={globalStyles.image}
+					style={globalStyles.logo}
 				/>
 				<Text style={globalStyles.title}>Survey DME</Text>
 				<TextInput

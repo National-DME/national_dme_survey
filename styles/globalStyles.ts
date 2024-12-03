@@ -27,7 +27,7 @@ const useGlobalStyles = () => {
 			justifyContent: 'center',
 			alignItems: 'center',
 			backgroundColor: theme.background,
-			marginHorizontal: 10
+			marginHorizontal: 10,
 		},
 		iconContainer: {
 			paddingHorizontal: 8,
@@ -43,10 +43,24 @@ const useGlobalStyles = () => {
 			flex: 1,
 			justifyContent: 'center',
 			alignItems: 'center',
-			backgroundColor: theme.constant.success,
+			backgroundColor: theme.text,
 			padding: 8,
 		},
 		/* -- CONTENT -- */
+		successTitleContent: {
+			fontFamily: 'Nunito',
+			fontSize: 35,
+			color: theme.border,
+			textAlign: 'center',
+			marginVertical: 10,
+		},
+		successSubtitleContent: {
+			fontFamily: 'Nunito',
+			fontSize: 20,
+			color: theme.border,
+			textAlign: 'center',
+			marginVertical: 10,
+		},
 		error: {
 			backgroundColor: theme.constant.error,
 			color: theme.text,
@@ -59,9 +73,14 @@ const useGlobalStyles = () => {
 		errorText: {
 			color: theme.constant.error,
 		},
-		image: {
+		logo: {
 			width: 130,
 			height: 130,
+			resizeMode: 'contain',
+		},
+		image: {
+			height: '46%',
+			aspectRatio: 1,
 			resizeMode: 'contain',
 		},
 		title: {
@@ -234,12 +253,12 @@ const useGlobalStyles = () => {
 		chipContent: {
 			fontFamily: 'Nunito',
 			fontSize: 15,
-			color: theme.text
+			color: theme.text,
 		},
 		/* -- DROPDOWN -- */
 		dropdownContainer: {
 			width: '100%',
-			minHeight: '80%'
+			minHeight: '80%',
 		},
 		dropdownContent: {
 			fontFamily: 'Nunito',
@@ -258,7 +277,7 @@ const useGlobalStyles = () => {
 		dropdownContainerSelected: {
 			backgroundColor: theme.secondary,
 			color: theme.text,
-			borderColor: theme.secondary
+			borderColor: theme.secondary,
 		},
 		dropdownContentSubtitle: {
 			fontFamily: 'Nunito',
