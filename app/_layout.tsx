@@ -39,7 +39,7 @@ const RootStack = () => {
 			}
 	
 			if (authState.authenticated === true) {
-				router.replace('/(protected)/success');
+				router.replace('/(protected)/(home)/');
 			} else {
 				router.replace('/LoginScreen');
 			}
@@ -60,9 +60,7 @@ const RootStack = () => {
 				flex: 1,
 				backgroundColor: theme.background,
 			}}>
-				{(fontsLoaded && authState.authenticated !== null) && (
-					<Slot />
-				)}
+				<Slot />
 		</GestureHandlerRootView>
 	);
 }

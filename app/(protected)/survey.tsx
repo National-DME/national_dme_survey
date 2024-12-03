@@ -9,6 +9,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { useSurvey } from '../../context/SurveyContext';
 import Button from '../../components/generic/Button';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import ErrorMessage from '../../components/error/ErrorMessage';
 
 /**
  *
@@ -19,6 +20,7 @@ export default function SurveyScreen() {
 	const router = useRouter();
 	const { survey, surveyFinished, handleUpload } = useSurvey();
 	const [loading, setLoading] = useState<boolean>(false);
+	const [errorMessage, setErrorMessage] = useState<string>('');
 
 	const handleSubmit = async () => {
 		try {
@@ -28,29 +30,39 @@ export default function SurveyScreen() {
 			setLoading(false);
 			router.replace('/success');
 		} catch (error: any) {
-			console.log(error);
+			setErrorMessage('Unable to submit survey');
 		}
 	}
 
 	return (
-		<SafeAreaView style={globalStyles.container}>
-			{/* 
-                Updating status bar color to convey to user that survey has started and to provide contrast
-            */}
-			<StatusBar style='light' backgroundColor={theme.accent.gradient1} />
-			<ScrollView contentContainerStyle={globalStyles.questionContainer}>
-				{survey.map((question: QuestionInterface, index) => (
-					<Question key={index} question={question} index={index} />
-				))}
-				{surveyFinished && (
-					<Button 
-						title={loading ? 'Submitting...' : 'Submit Survey'}
-						onPress={handleSubmit}
-						buttonStyle={loading ? globalStyles.buttonSuccess : globalStyles.buttonAccent}
-						disabled={loading}
-					/>
-				)}
-			</ScrollView>
-		</SafeAreaView>
+		<>
+			{errorMessage ? (
+				<ErrorMessage 
+					title={errorMessage}
+					callback={handleSubmit}
+					buttonTitle='Submit survey again'	
+				/>
+			) : (
+				<SafeAreaView style={globalStyles.container}>
+					{/* 
+						Updating status bar color to convey to user that survey has started and to provide contrast
+					*/}
+					<StatusBar style='light' backgroundColor={theme.accent.gradient1} />
+					<ScrollView contentContainerStyle={globalStyles.questionContainer}>
+						{survey.map((question: QuestionInterface, index) => (
+							<Question key={index} question={question} index={index} />
+						))}
+						{surveyFinished && (
+							<Button 
+								title={loading ? 'Submitting...' : 'Submit Survey'}
+								onPress={handleSubmit}
+								buttonStyle={loading ? globalStyles.buttonSuccess : globalStyles.buttonAccent}
+								disabled={loading}
+							/>
+						)}
+					</ScrollView>
+				</SafeAreaView>
+			)}
+		</>
 	);
 }
