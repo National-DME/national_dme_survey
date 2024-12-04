@@ -1,6 +1,8 @@
-{
+const IS_DEV = process.env.APP_VARIANT === 'development';
+
+export default {
   "expo": {
-    "name": "Survey DME",
+    "name": IS_DEV ? "Survey DEV" : "Survey DME",
     "slug": "national_dme_survey",
     "version": "1.0.0",
     "scheme": "your-app-scheme",
