@@ -73,6 +73,7 @@ export default function RepresentativeScreen() {
 			console.log('Initializing survey');
 			await handleWarehouses(userData.token);
 			await handleQuestions(userData.token);
+			setErrorMessage('');
 		} catch (error: any) {
 			setErrorMessage(
 				error.message ? error.message : 'Unable to generate survey'
@@ -97,11 +98,9 @@ export default function RepresentativeScreen() {
 				/>
 			) : (
 				<>
-					<StatusBar style='light' backgroundColor={theme.secondary} />
-					<ScrollView 
-					contentContainerStyle={globalStyles.container}
-					keyboardShouldPersistTaps='handled'
-					>
+					<ScrollView
+						contentContainerStyle={globalStyles.container}
+						keyboardShouldPersistTaps='handled'>
 						<Text style={globalStyles.title}>Where are you?</Text>
 						<View style={globalStyles.line} />
 						<Text style={globalStyles.subtitle}>
@@ -139,7 +138,7 @@ export default function RepresentativeScreen() {
 								/>
 							)}
 						/>
-						{(selectedBranch && selectedWarehouses.length > 0) && (
+						{selectedBranch && selectedWarehouses.length > 0 && (
 							<View style={globalStyles.chipContainer}>
 								{selectedWarehouses.map((warehouse) => (
 									<Chip
@@ -148,10 +147,10 @@ export default function RepresentativeScreen() {
 										textStyle={globalStyles.chipContent}
 										onPress={() => handleSelectWarehouse(warehouse)}
 										icon={() => (
-											<MaterialCommunityIcons 
+											<MaterialCommunityIcons
 												name='close'
 												size={24}
-												color={theme.text}	
+												color={theme.text}
 											/>
 										)}>
 										{warehouse}
@@ -160,13 +159,13 @@ export default function RepresentativeScreen() {
 							</View>
 						)}
 						{selectedBranch && (
-							<Button 
+							<Button
 								title='Select warehouse(s)'
 								onPress={() => setRenderWarehousePicker(true)}
 								buttonStyle={globalStyles.buttonSecondary}
 							/>
 						)}
-						{(selectedBranch && selectedWarehouses.length !== 0) && (
+						{selectedBranch && selectedWarehouses.length !== 0 && (
 							<Button
 								title='Start Survey'
 								onPress={handleStartSurvey}
@@ -179,21 +178,19 @@ export default function RepresentativeScreen() {
 					</ScrollView>
 				</>
 			)}
-			{(selectedBranch && warehouseList) && (
-				<WarehousePicker 
+			{selectedBranch && warehouseList && (
+				<WarehousePicker
 					handleSelectWarehouse={handleSelectWarehouse}
-					branch={selectedBranch} 
+					branch={selectedBranch}
 					visible={renderWarehousePicker}
 					onClose={() => setRenderWarehousePicker(false)}
-					warehouses={
-					warehouseList[selectedBranch].map(
-						(warehouse) => ({
-							label: warehouse.WhseDescription,
-							value: warehouse.WhseID,
-						})
-					)}
+					warehouses={warehouseList[selectedBranch].map((warehouse) => ({
+						label: warehouse.WhseDescription,
+						value: warehouse.WhseID,
+					}))}
 				/>
 			)}
+			<StatusBar style='light' animated={true} backgroundColor={theme.secondary} />
 		</>
 	);
 }

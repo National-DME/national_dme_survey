@@ -4,11 +4,14 @@ export default {
   "expo": {
     "name": IS_DEV ? "Survey DEV" : "Survey DME",
     "slug": "national_dme_survey",
-    "version": "2.0.0",
+    "version": "2.0.1",
     "scheme": "your-app-scheme",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
+    "androidStatusBar": {
+      "translucent": false,
+    },
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",

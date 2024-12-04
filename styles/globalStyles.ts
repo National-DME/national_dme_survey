@@ -1,6 +1,5 @@
 import { Dimensions, StyleSheet } from 'react-native';
 import { theme } from './theme';
-import { underDampedSpringCalculations } from 'react-native-reanimated/lib/typescript/reanimated2/animation/springUtils';
 
 /**
  * 

@@ -37,35 +37,38 @@ export default function SurveyScreen() {
 	return (
 		<>
 			{errorMessage ? (
-				<ErrorMessage 
-					title={errorMessage}
-					callback={handleSubmit}
-					buttonTitle='Submit survey again'	
+				<ErrorMessage
+				title={errorMessage}
+				callback={handleSubmit}
+				buttonTitle='Submit survey again'
 				/>
 			) : (
 				<SafeAreaView style={globalStyles.container}>
 					{/* 
 						Updating status bar color to convey to user that survey has started and to provide contrast
-					*/}
-					<StatusBar style='light' backgroundColor={theme.accent.gradient1} />
-					<ScrollView 
-					contentContainerStyle={globalStyles.questionContainer}
-					keyboardShouldPersistTaps='handled'
-					>
+						*/}
+					<ScrollView
+						contentContainerStyle={globalStyles.questionContainer}
+						keyboardShouldPersistTaps='handled'>
 						{survey.map((question: QuestionInterface, index) => (
 							<Question key={index} question={question} index={index} />
 						))}
 						{surveyFinished && (
-							<Button 
-								title={loading ? 'Submitting...' : 'Submit Survey'}
-								onPress={handleSubmit}
-								buttonStyle={loading ? globalStyles.buttonSuccess : globalStyles.buttonAccent}
-								disabled={loading}
+							<Button
+							title={loading ? 'Submitting...' : 'Submit Survey'}
+							onPress={handleSubmit}
+							buttonStyle={
+								loading
+								? globalStyles.buttonSuccess
+								: globalStyles.buttonAccent
+							}
+							disabled={loading}
 							/>
 						)}
 					</ScrollView>
 				</SafeAreaView>
 			)}
+			<StatusBar style='light' animated={true} backgroundColor={theme.accent.gradient1} />
 		</>
 	);
 }

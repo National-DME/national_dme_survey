@@ -37,7 +37,6 @@ export default function LoginScreen() {
 
 	return (
 		<>
-			<StatusBar style='light' backgroundColor={theme.primary} />
 			<SafeAreaView style={{ flex: 1 }}>
 				<ScrollView contentContainerStyle={globalStyles.loginContainer}>
 					<Image
@@ -85,6 +84,7 @@ export default function LoginScreen() {
 					/>
 				</ScrollView>
 			</SafeAreaView>
+			<StatusBar style='light' animated={true} backgroundColor={theme.primary} />
 		</>
 	);
 }

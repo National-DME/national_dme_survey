@@ -17,7 +17,6 @@ export default function ErrorMessage(props: ErrorMessageProps) {
 
 	return (
         <>
-            <StatusBar style='light' backgroundColor={theme.constant.error} />
             <View style={globalStyles.errorContainer}>
                 <Text style={globalStyles.title}>An error has occurred!</Text>
                 <MaterialIcons 
@@ -33,6 +32,7 @@ export default function ErrorMessage(props: ErrorMessageProps) {
                     onPress={props.callback}
                 />
             </View>
+            <StatusBar style='light' animated={true} backgroundColor={theme.constant.error} />
         </>
 	);
 }

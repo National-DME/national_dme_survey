@@ -41,21 +41,23 @@ export default function success() {
 
 	return (
 		<ScrollView contentContainerStyle={globalStyles.successContainer}>
-            <StatusBar style='light' backgroundColor={theme.constant.success} />
 			<Text style={globalStyles.successTitleContent}>Survey complete!</Text>
-            <Text style={globalStyles.successSubtitleContent}>Thank you{name}!</Text>
-            <Image
-                source={images[Math.floor(Math.random() * 6)]}
-                style={globalStyles.image}
-            />
-            <Text style={globalStyles.successSubtitleContent}>
-                Please return device to the account representative
-            </Text>
-            <Button
-                title='Home'
-                onPress={handleNavigateHome}
-                buttonStyle={globalStyles.buttonSuccess}
-            />
+			<Text style={globalStyles.successSubtitleContent}>
+				Thank you{name}!
+			</Text>
+			<Image
+				source={images[Math.floor(Math.random() * 6)]}
+				style={globalStyles.image}
+			/>
+			<Text style={globalStyles.successSubtitleContent}>
+				Please return device to the account representative
+			</Text>
+			<Button
+				title='Home'
+				onPress={handleNavigateHome}
+				buttonStyle={globalStyles.buttonSuccess}
+			/>
+			<StatusBar style='light' animated={true} backgroundColor={theme.constant.success} />
 		</ScrollView>
 	);
 }
