@@ -20,7 +20,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.tomcottis21.national_dme_survey"
+      "package": "com.nationalDME.national_dme_survey"
     },
     "web": {
       "favicon": "./assets/favicon.png",
