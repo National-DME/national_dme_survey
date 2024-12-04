@@ -96,86 +96,88 @@ export default function RepresentativeScreen() {
 					buttonTitle='Generate survey again'
 				/>
 			) : (
-				<ScrollView 
-				contentContainerStyle={globalStyles.container}
-				keyboardShouldPersistTaps='handled'
-				>
+				<>
 					<StatusBar style='light' backgroundColor={theme.secondary} />
-					<Text style={globalStyles.title}>Where are you?</Text>
-					<View style={globalStyles.line} />
-					<Text style={globalStyles.subtitle}>
-						Before starting the survey, select the branch and
-						warehouse(s) you’re at. This ensures the client ratings are
-						linked to the right location.
-					</Text>
-					<Dropdown
-						mode='default'
-						style={globalStyles.dropdown}
-						placeholderStyle={globalStyles.placeholder}
-						selectedTextStyle={globalStyles.selectedText}
-						inputSearchStyle={globalStyles.inputSearchStyle}
-						itemTextStyle={globalStyles.itemTextStyle}
-						activeColor={theme.secondary}
-						data={branches.map((branch) => ({
-							label: branch,
-							value: branch,
-						}))}
-						placeholder='Select branch'
-						searchPlaceholder='Search branches...'
-						maxHeight={300}
-						labelField='label'
-						valueField='value'
-						value={selectedBranch}
-						onChange={(item) => {
-							setSelectedBranch(item.value);
-						}}
-						renderLeftIcon={() => (
-							<MaterialCommunityIcons
-								color={theme.secondary}
-								size={20}
-								name='source-branch'
-								style={{ padding: 5 }}
+					<ScrollView 
+					contentContainerStyle={globalStyles.container}
+					keyboardShouldPersistTaps='handled'
+					>
+						<Text style={globalStyles.title}>Where are you?</Text>
+						<View style={globalStyles.line} />
+						<Text style={globalStyles.subtitle}>
+							Before starting the survey, select the branch and
+							warehouse(s) you’re at. This ensures the client ratings are
+							linked to the right location.
+						</Text>
+						<Dropdown
+							mode='default'
+							style={globalStyles.dropdown}
+							placeholderStyle={globalStyles.placeholder}
+							selectedTextStyle={globalStyles.selectedText}
+							inputSearchStyle={globalStyles.inputSearchStyle}
+							itemTextStyle={globalStyles.itemTextStyle}
+							activeColor={theme.secondary}
+							data={branches.map((branch) => ({
+								label: branch,
+								value: branch,
+							}))}
+							placeholder='Select branch'
+							searchPlaceholder='Search branches...'
+							maxHeight={300}
+							labelField='label'
+							valueField='value'
+							value={selectedBranch}
+							onChange={(item) => {
+								setSelectedBranch(item.value);
+							}}
+							renderLeftIcon={() => (
+								<MaterialCommunityIcons
+									color={theme.secondary}
+									size={20}
+									name='source-branch'
+									style={{ padding: 5 }}
+								/>
+							)}
+						/>
+						{(selectedBranch && selectedWarehouses.length > 0) && (
+							<View style={globalStyles.chipContainer}>
+								{selectedWarehouses.map((warehouse) => (
+									<Chip
+										key={warehouse}
+										style={globalStyles.chip}
+										textStyle={globalStyles.chipContent}
+										onPress={() => handleSelectWarehouse(warehouse)}
+										icon={() => (
+											<MaterialCommunityIcons 
+												name='close'
+												size={24}
+												color={theme.text}	
+											/>
+										)}>
+										{warehouse}
+									</Chip>
+								))}
+							</View>
+						)}
+						{selectedBranch && (
+							<Button 
+								title='Select warehouse(s)'
+								onPress={() => setRenderWarehousePicker(true)}
+								buttonStyle={globalStyles.buttonSecondary}
 							/>
 						)}
-					/>
-					{(selectedBranch && selectedWarehouses.length > 0) && (
-						<View style={globalStyles.chipContainer}>
-							{selectedWarehouses.map((warehouse) => (
-								<Chip
-									key={warehouse}
-									style={globalStyles.chip}
-									textStyle={globalStyles.chipContent}
-									onPress={() => handleSelectWarehouse(warehouse)}
-									icon={() => (
-										<MaterialCommunityIcons 
-											name='close'
-											size={24}
-											color={theme.text}	
-										/>
-									)}>
-									{warehouse}
-								</Chip>
-							))}
-						</View>
-					)}
-					{selectedBranch && (
-						<Button 
-							title='Select warehouse(s)'
-							onPress={() => setRenderWarehousePicker(true)}
-							buttonStyle={globalStyles.buttonSecondary}
-						/>
-					)}
-					{(selectedBranch && selectedWarehouses.length !== 0) && (
-						<Button
-							title='Start Survey'
-							onPress={handleStartSurvey}
-							buttonStyle={[
-								globalStyles.button,
-								globalStyles.buttonAccent,
-							]}
-						/>
-					)}
-				</ScrollView>
+						{(selectedBranch && selectedWarehouses.length !== 0) && (
+							<Button
+								title='Start Survey'
+								onPress={handleStartSurvey}
+								buttonStyle={[
+									globalStyles.button,
+									globalStyles.buttonAccent,
+								]}
+							/>
+						)}
+					</ScrollView>
+				</>
 			)}
 			{(selectedBranch && warehouseList) && (
 				<WarehousePicker 
@@ -189,7 +191,8 @@ export default function RepresentativeScreen() {
 							label: warehouse.WhseDescription,
 							value: warehouse.WhseID,
 						})
-					)}/>
+					)}
+				/>
 			)}
 		</>
 	);

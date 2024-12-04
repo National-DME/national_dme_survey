@@ -1,5 +1,6 @@
 import { Dimensions, StyleSheet } from 'react-native';
 import { theme } from './theme';
+import { underDampedSpringCalculations } from 'react-native-reanimated/lib/typescript/reanimated2/animation/springUtils';
 
 /**
  * 
@@ -11,7 +12,7 @@ const useGlobalStyles = () => {
 	return StyleSheet.create({
 		/* -- CONTAINERS -- */
 		container: {
-			flex: 1,
+			flexGrow: 1,
 			justifyContent: 'flex-start',
 			backgroundColor: theme.background,
 			paddingHorizontal: 8,
@@ -22,7 +23,7 @@ const useGlobalStyles = () => {
 			paddingVertical: 10,
 		},
 		loginContainer: {
-			flex: 1,
+			flexGrow: 1,
 			flexDirection: 'column',
 			justifyContent: 'center',
 			alignItems: 'center',
@@ -40,7 +41,7 @@ const useGlobalStyles = () => {
 			padding: 8,
 		},
 		successContainer: {
-			flex: 1,
+			flexGrow: 1,
 			justifyContent: 'center',
 			alignItems: 'center',
 			backgroundColor: theme.text,
@@ -79,7 +80,8 @@ const useGlobalStyles = () => {
 			resizeMode: 'contain',
 		},
 		image: {
-			height: '46%',
+			width: '100%',
+			height: undefined,
 			aspectRatio: 1,
 			resizeMode: 'contain',
 		},

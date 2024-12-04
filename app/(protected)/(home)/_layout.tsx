@@ -11,6 +11,7 @@ import { AntDesign } from '@expo/vector-icons';
 import useGlobalStyles from '../../../styles/globalStyles';
 import { View, Text } from 'react-native';
 import { getAuthenticationData } from '../../../utils/storage/secureStore';
+import * as Application from 'expo-application';
 
 export default function HomeLayout() {
     const { logout } = useAuth();
@@ -43,7 +44,7 @@ export default function HomeLayout() {
                         backgroundColor: theme.background,
                     }}>
                     <Text style={globalStyles.drawerVersionText}>{username}</Text>
-                    <Text style={globalStyles.drawerVersionText}>v1.0.0</Text>
+                    <Text style={globalStyles.drawerVersionText}>v{Application.nativeApplicationVersion}</Text>
                 </View>
             </DrawerContentScrollView>
         );

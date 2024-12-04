@@ -6,6 +6,7 @@ import { theme } from '../../styles/theme';
 import { useSurvey } from '../../context/SurveyContext';
 import { useRouter } from 'expo-router';
 import Button from '../../components/generic/Button';
+import { ScrollView } from 'react-native-gesture-handler';
 
 export default function success() {
     const globalStyles = useGlobalStyles();
@@ -39,9 +40,9 @@ export default function success() {
     }
 
 	return (
-		<View style={globalStyles.successContainer}>
+		<ScrollView contentContainerStyle={globalStyles.successContainer}>
             <StatusBar style='light' backgroundColor={theme.constant.success} />
-			<Text style={globalStyles.successTitleContent}>Survey submitted successfully!</Text>
+			<Text style={globalStyles.successTitleContent}>Survey complete!</Text>
             <Text style={globalStyles.successSubtitleContent}>Thank you{name}!</Text>
             <Image
                 source={images[Math.floor(Math.random() * 6)]}
@@ -55,6 +56,6 @@ export default function success() {
                 onPress={handleNavigateHome}
                 buttonStyle={globalStyles.buttonSuccess}
             />
-		</View>
+		</ScrollView>
 	);
 }

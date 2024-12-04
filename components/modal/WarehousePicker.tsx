@@ -47,7 +47,6 @@ export default function WarehousePicker(props: WarehousePickerProps) {
                     globalStyles.generalModalView,
                     globalStyles.baseModalView
                 ]}>
-                    <Text style={globalStyles.modalTitle}>Select Warehouse(s)</Text>
                     <Text style={globalStyles.modalSubtitle}>{props.branch}</Text>
                     <View style={{
                         maxHeight: '20%'
