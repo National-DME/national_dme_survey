@@ -31,7 +31,10 @@ export default function WarehousePicker(props: WarehousePickerProps) {
         } 
     
         const newResultSet = props.warehouses.filter((warehouse) => {
-            return warehouse.label && warehouse.label.trim().toLowerCase().includes(keyword.trim().toLowerCase());
+            return (
+                (warehouse.label && warehouse.label.trim().toLowerCase().includes(keyword.trim().toLowerCase())) || 
+                (warehouse.value && warehouse.value.trim().toLowerCase().includes(keyword.trim().toLowerCase()))
+            );
         });
         setFilteredSelection(newResultSet);
     }, [keyword, props.warehouses]);
