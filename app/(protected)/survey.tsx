@@ -38,9 +38,9 @@ export default function SurveyScreen() {
 		<>
 			{errorMessage ? (
 				<ErrorMessage
-				title={errorMessage}
-				callback={handleSubmit}
-				buttonTitle='Submit survey again'
+					title={errorMessage}
+					callback={handleSubmit}
+					buttonTitle='Submit survey again'
 				/>
 			) : (
 				<SafeAreaView style={globalStyles.container}>
@@ -50,25 +50,46 @@ export default function SurveyScreen() {
 					<ScrollView
 						contentContainerStyle={globalStyles.questionContainer}
 						keyboardShouldPersistTaps='handled'>
+						<Text style={globalStyles.surveyInstructionContent}>
+							Thank you for taking the time to complete this survey. Your
+							feedback is valuable to us.
+						</Text>
+						<Text style={globalStyles.surveyInstructionContent}>
+							Please answer every question thoughtfully and honestly.
+						</Text>
+						<Text></Text>
+						<Text style={globalStyles.surveyInstructionContent}>
+							For rating questions, use the following rubric:
+						</Text>
+						<Text style={globalStyles.surveyInstructionContent}>{`1 - Strongly Disagree`}</Text>
+						<Text style={globalStyles.surveyInstructionContent}>{`2 - Disagree`}</Text>
+						<Text style={globalStyles.surveyInstructionContent}>{`3 - Neutral`}</Text>
+						<Text style={globalStyles.surveyInstructionContent}>{`4 - Agree`}</Text>
+						<Text style={globalStyles.surveyInstructionContent}>{`5 - Strongly Agree`}</Text>
+
 						{survey.map((question: QuestionInterface, index) => (
 							<Question key={index} question={question} index={index} />
 						))}
 						{surveyFinished && (
 							<Button
-							title={loading ? 'Submitting...' : 'Submit Survey'}
-							onPress={handleSubmit}
-							buttonStyle={
-								loading
-								? globalStyles.buttonSuccess
-								: globalStyles.buttonAccent
-							}
-							disabled={loading}
+								title={loading ? 'Submitting...' : 'Submit Survey'}
+								onPress={handleSubmit}
+								buttonStyle={
+									loading
+										? globalStyles.buttonSuccess
+										: globalStyles.buttonAccent
+								}
+								disabled={loading}
 							/>
 						)}
 					</ScrollView>
 				</SafeAreaView>
 			)}
-			<StatusBar style='light' animated={true} backgroundColor={theme.accent.gradient1} />
+			<StatusBar
+				style='light'
+				animated={true}
+				backgroundColor={theme.accent.gradient1}
+			/>
 		</>
 	);
 }

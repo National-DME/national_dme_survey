@@ -17,6 +17,7 @@ import { Chip } from 'react-native-paper';
 export interface WarehouseSelection {
 	value: string;
 	label: string;
+	lastDtm: string;
 }
 
 /**
@@ -187,6 +188,7 @@ export default function RepresentativeScreen() {
 					warehouses={warehouseList[selectedBranch].map((warehouse) => ({
 						label: warehouse.WhseDescription,
 						value: warehouse.WhseID,
+						lastDtm: warehouse.LastDtm
 					}))}
 				/>
 			)}

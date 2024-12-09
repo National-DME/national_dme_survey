@@ -73,6 +73,11 @@ const useGlobalStyles = () => {
 		errorText: {
 			color: theme.constant.error,
 		},
+		surveyInstructionContent: {
+			color: theme.text,
+			fontFamily: 'Nunito',
+			fontSize: 20
+		},
 		logo: {
 			width: 130,
 			height: 130,
@@ -284,6 +289,12 @@ const useGlobalStyles = () => {
 			fontFamily: 'Nunito',
 			fontSize: 18,
 			color: theme.text,
+		},
+		dropdownContentSubtitleFaded: {
+			fontFamily: 'Nunito',
+			fontSize: 18,
+			color: theme.text,
+			fontStyle: 'italic'
 		},
 		dropdownMessageContent: {
 			fontFamily: 'Nunito',

@@ -42,6 +42,7 @@ export interface Warehouse {
 	BranchWhseKey: string;
 	BranchWhseID: string;
 	WhseDescription: string;
+	LastDtm: string;
 }
 
 /**
