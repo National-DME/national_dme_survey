@@ -4,7 +4,7 @@ export default {
   "expo": {
     "name": IS_DEV ? "Survey DEV" : "Survey DME",
     "slug": "national_dme_survey",
-    "version": "2.1.0",
+    "version": "2.1.1",
     "scheme": "your-app-scheme",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

@@ -477,7 +477,7 @@ export const SurveyContextProvider: React.FC<{ children: ReactNode }> = ({
 		};
 
 		const departmentQuestion: QuestionInterface = {
-			text: 'What department / position do you belong do?',
+			text: 'What department / position do you belong to?',
 			type: 'radio list',
 			key: 'DEPARTMENT',
 			answers: departments.map((department) => ({
